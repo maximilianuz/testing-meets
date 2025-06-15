@@ -158,7 +158,12 @@
         horarios += "\n";
       });
 
-      const mensaje = `📌 *${titulo}*\n👤 Organiza: ${nombre}\n📝 ${comentarios}\n📅 Fecha: ${fecha}\n🕐 Hora: ${hora} (hora local)\n🔗 Enlace: ${link}\n\n${horarios}💬 ${saludo}`;
+      const fechaFormateada = DateTime.fromISO(fecha).toFormat('dd/LL/yyyy');
+      const mensaje = `📌 *${titulo}*
+👤 Organiza: ${nombre}
+📝 ${comentarios}
+📅 Fecha: ${fechaFormateada}
+🕐 Hora: ${hora} (hora local)`\n🔗 Enlace: ${link}\n\n${horarios}💬 ${saludo}`;
       document.getElementById("preview").innerText = mensaje;
     }
 

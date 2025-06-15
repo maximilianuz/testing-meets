@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -88,98 +87,36 @@
   <h1>Coordinador de Reuniones Internacional 🌐</h1>
   <form id="meeting-form">
     <label>Nombre de la Empresa o Persona</label>
-    <input type="text" id="nombre" required />
+    <input type="text" id="nombre" required /><label>Título de la Reunión</label>
+<input type="text" id="titulo" style="text-transform: uppercase; font-weight: bold;" required />
 
-    <label>Título de la Reunión</label>
-    <input type="text" id="titulo" style="text-transform: uppercase; font-weight: bold;" required />
+<label>Comentarios</label>
+<textarea id="comentarios" required></textarea>
 
-    <label>Comentarios</label>
-    <textarea id="comentarios" required></textarea>
+<label>Link de la Reunión</label>
+<input type="url" id="link" placeholder="https://meet.google.com/..." required />
 
-    <label>Link de la Reunión</label>
-    <input type="url" id="link" placeholder="https://meet.google.com/..." required />
+<label>Saludo de Despedida</label>
+<input type="text" id="saludo" required />
 
-    <label>Saludo de Despedida</label>
-    <input type="text" id="saludo" required />
+<label>Fecha de la Reunión</label>
+<input type="date" id="fecha" required />
 
-    <label>Fecha de la Reunión</label>
-    <input type="date" id="fecha" required />
+<label>Hora de la Reunión</label>
+<input type="time" id="hora" required />
 
-    <label>Hora de la Reunión</label>
-    <input type="time" id="hora" required />
+<label>Seleccioná los países participantes</label>
+<select id="paises" multiple size="10" required></select>
 
-    <label>Seleccioná los países participantes</label>
-    <select id="paises" multiple size="10" required></select>
+<button type="button" onclick="generarMensaje()">Generar y Compartir</button>
 
-    <button type="button" onclick="generarMensaje()">Generar y Compartir</button>
-  </form>
-
-  <div id="preview"></div>
-
-  <div class="share-buttons">
+  </form>  <div id="preview"></div>  <div class="share-buttons">
     <button onclick="copiarMensaje()">📋 Copiar</button>
     <button onclick="compartirWhatsApp()">🟢 WhatsApp</button>
     <button onclick="compartirTelegram()">🔵 Telegram</button>
-  </div>
+  </div>  <script>
+    const regiones = REEMPLAZADO_CON_DATOS_JSON_COMPLETOS;
 
-  <script>
-    const regiones = {
-      "Latinoamérica": [
-        ["Argentina", "🇦🇷", "America/Argentina/Buenos_Aires"],
-        ["México", "🇲🇽", "America/Mexico_City"],
-        ["Colombia", "🇨🇴", "America/Bogota"],
-        ["Chile", "🇨🇱", "America/Santiago"],
-        ["Perú", "🇵🇪", "America/Lima"],
-        ["Uruguay", "🇺🇾", "America/Montevideo"],
-        ["Paraguay", "🇵🇾", "America/Asuncion"],
-        ["Bolivia", "🇧🇴", "America/La_Paz"],
-        ["Ecuador", "🇪🇨", "America/Guayaquil"],
-        ["Venezuela", "🇻🇪", "America/Caracas"],
-        ["Cuba", "🇨🇺", "America/Havana"],
-        ["Rep. Dominicana", "🇩🇴", "America/Santo_Domingo"]
-      ],
-      "América del Norte": [
-        ["Estados Unidos (EST)", "🇺🇸", "America/New_York"],
-        ["Estados Unidos (PST)", "🇺🇸", "America/Los_Angeles"],
-        ["Canadá (Toronto)", "🇨🇦", "America/Toronto"],
-        ["Canadá (Vancouver)", "🇨🇦", "America/Vancouver"]
-      ],
-      "Europa": [
-        ["España", "🇪🇸", "Europe/Madrid"],
-        ["Francia", "🇫🇷", "Europe/Paris"],
-        ["Alemania", "🇩🇪", "Europe/Berlin"],
-        ["Italia", "🇮🇹", "Europe/Rome"],
-        ["Reino Unido", "🇬🇧", "Europe/London"],
-        ["Países Bajos", "🇳🇱", "Europe/Amsterdam"],
-        ["Portugal", "🇵🇹", "Europe/Lisbon"],
-        ["Suecia", "🇸🇪", "Europe/Stockholm"],
-        ["Noruega", "🇳🇴", "Europe/Oslo"]
-      ],
-      "África": [
-        ["Sudáfrica", "🇿🇦", "Africa/Johannesburg"],
-        ["Egipto", "🇪🇬", "Africa/Cairo"],
-        ["Nigeria", "🇳🇬", "Africa/Lagos"],
-        ["Kenia", "🇰🇪", "Africa/Nairobi"],
-        ["Marruecos", "🇲🇦", "Africa/Casablanca"]
-      ],
-      "Asia": [
-        ["China", "🇨🇳", "Asia/Shanghai"],
-        ["India", "🇮🇳", "Asia/Kolkata"],
-        ["Japón", "🇯🇵", "Asia/Tokyo"],
-        ["Corea del Sur", "🇰🇷", "Asia/Seoul"],
-        ["Tailandia", "🇹🇭", "Asia/Bangkok"],
-        ["Indonesia", "🇮🇩", "Asia/Jakarta"],
-        ["Emiratos Árabes", "🇦🇪", "Asia/Dubai"]
-      ],
-      "Oceanía": [
-        ["Australia (Sydney)", "🇦🇺", "Australia/Sydney"],
-        ["Australia (Perth)", "🇦🇺", "Australia/Perth"],
-        ["Nueva Zelanda", "🇳🇿", "Pacific/Auckland"],
-        ["Fiyi", "🇫🇯", "Pacific/Fiji"]
-      ]
-    };
-
-    // Generar opciones en el selector
     const selector = document.getElementById("paises");
     Object.entries(regiones).forEach(([region, paises]) => {
       const optgroup = document.createElement("optgroup");
@@ -239,6 +176,5 @@
       const texto = encodeURIComponent(document.getElementById("preview").innerText);
       window.open(`https://t.me/share/url?text=${texto}`, '_blank');
     }
-  </script>
-</body>
+  </script></body>
 </html>

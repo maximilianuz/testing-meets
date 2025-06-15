@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,10 +6,7 @@
   <title>Coordinador de Reuniones Internacional</title>
   <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-    
+    * { box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', sans-serif;
       background: #e7f0f7;
@@ -34,7 +30,7 @@
       display: block;
       margin-top: 15px;
     }
-    input, textarea {
+    input, textarea, select {
       width: 100%;
       padding: 10px;
       margin-top: 6px;
@@ -59,7 +55,7 @@
     button:hover {
       background: #0056b3;
     }
-    #preview, #timezone-display {
+    #preview {
       margin-top: 30px;
       padding: 20px;
       background: #f1f9ff;
@@ -71,25 +67,22 @@
       display: flex;
       gap: 10px;
       margin-top: 20px;
+      max-width: 800px;
+      margin-inline: auto;
     }
     .share-buttons button {
       flex: 1;
     }
-  
     @media (max-width: 768px) {
       form, .share-buttons {
         padding: 20px;
         width: 100%;
-        box-sizing: border-box;
-      }
-      input, textarea, button {
-        font-size: 1rem;
       }
       .share-buttons {
         flex-direction: column;
       }
     }
-    </style>
+  </style>
 </head>
 <body>
   <h1>Coordinador de Reuniones Internacional 🌐</h1>
@@ -115,20 +108,75 @@
     <label>Hora de la Reunión</label>
     <input type="time" id="hora" required />
 
+    <label>Seleccioná los países participantes</label>
+    <select id="paises" multiple size="10" required style="height:auto;">
+      <optgroup label="Latinoamérica">
+        <option value="Argentina|🇦🇷|America/Argentina/Buenos_Aires">🇦🇷 Argentina</option>
+        <option value="México|🇲🇽|America/Mexico_City">🇲🇽 México</option>
+        <option value="Colombia|🇨🇴|America/Bogota">🇨🇴 Colombia</option>
+        <option value="Chile|🇨🇱|America/Santiago">🇨🇱 Chile</option>
+        <option value="Perú|🇵🇪|America/Lima">🇵🇪 Perú</option>
+        <option value="Uruguay|🇺🇾|America/Montevideo">🇺🇾 Uruguay</option>
+        <option value="Paraguay|🇵🇾|America/Asuncion">🇵🇾 Paraguay</option>
+        <option value="Bolivia|🇧🇴|America/La_Paz">🇧🇴 Bolivia</option>
+        <option value="Ecuador|🇪🇨|America/Guayaquil">🇪🇨 Ecuador</option>
+        <option value="Venezuela|🇻🇪|America/Caracas">🇻🇪 Venezuela</option>
+        <option value="Cuba|🇨🇺|America/Havana">🇨🇺 Cuba</option>
+        <option value="Rep. Dominicana|🇩🇴|America/Santo_Domingo">🇩🇴 Rep. Dominicana</option>
+      </optgroup>
+      <optgroup label="América del Norte">
+        <option value="Estados Unidos (EST)|🇺🇸|America/New_York">🇺🇸 Estados Unidos (EST)</option>
+        <option value="Estados Unidos (PST)|🇺🇸|America/Los_Angeles">🇺🇸 Estados Unidos (PST)</option>
+        <option value="Canadá (Toronto)|🇨🇦|America/Toronto">🇨🇦 Canadá (Toronto)</option>
+        <option value="Canadá (Vancouver)|🇨🇦|America/Vancouver">🇨🇦 Canadá (Vancouver)</option>
+      </optgroup>
+      <optgroup label="Europa">
+        <option value="España|🇪🇸|Europe/Madrid">🇪🇸 España</option>
+        <option value="Francia|🇫🇷|Europe/Paris">🇫🇷 Francia</option>
+        <option value="Alemania|🇩🇪|Europe/Berlin">🇩🇪 Alemania</option>
+        <option value="Italia|🇮🇹|Europe/Rome">🇮🇹 Italia</option>
+        <option value="Reino Unido|🇬🇧|Europe/London">🇬🇧 Reino Unido</option>
+        <option value="Países Bajos|🇳🇱|Europe/Amsterdam">🇳🇱 Países Bajos</option>
+        <option value="Portugal|🇵🇹|Europe/Lisbon">🇵🇹 Portugal</option>
+        <option value="Suecia|🇸🇪|Europe/Stockholm">🇸🇪 Suecia</option>
+        <option value="Noruega|🇳🇴|Europe/Oslo">🇳🇴 Noruega</option>
+      </optgroup>
+      <optgroup label="África">
+        <option value="Sudáfrica|🇿🇦|Africa/Johannesburg">🇿🇦 Sudáfrica</option>
+        <option value="Egipto|🇪🇬|Africa/Cairo">🇪🇬 Egipto</option>
+        <option value="Nigeria|🇳🇬|Africa/Lagos">🇳🇬 Nigeria</option>
+        <option value="Kenia|🇰🇪|Africa/Nairobi">🇰🇪 Kenia</option>
+        <option value="Marruecos|🇲🇦|Africa/Casablanca">🇲🇦 Marruecos</option>
+      </optgroup>
+      <optgroup label="Asia">
+        <option value="China|🇨🇳|Asia/Shanghai">🇨🇳 China</option>
+        <option value="India|🇮🇳|Asia/Kolkata">🇮🇳 India</option>
+        <option value="Japón|🇯🇵|Asia/Tokyo">🇯🇵 Japón</option>
+        <option value="Corea del Sur|🇰🇷|Asia/Seoul">🇰🇷 Corea del Sur</option>
+        <option value="Tailandia|🇹🇭|Asia/Bangkok">🇹🇭 Tailandia</option>
+        <option value="Indonesia|🇮🇩|Asia/Jakarta">🇮🇩 Indonesia</option>
+        <option value="Emiratos Árabes|🇦🇪|Asia/Dubai">🇦🇪 Emiratos Árabes</option>
+      </optgroup>
+      <optgroup label="Oceanía">
+        <option value="Australia (Sydney)|🇦🇺|Australia/Sydney">🇦🇺 Australia (Sydney)</option>
+        <option value="Australia (Perth)|🇦🇺|Australia/Perth">🇦🇺 Australia (Perth)</option>
+        <option value="Nueva Zelanda|🇳🇿|Pacific/Auckland">🇳🇿 Nueva Zelanda</option>
+        <option value="Fiyi|🇫🇯|Pacific/Fiji">🇫🇯 Fiyi</option>
+      </optgroup>
+    </select>
+
     <button type="button" onclick="generarMensaje()">Generar y Compartir</button>
   </form>
 
   <div id="preview"></div>
 
-  <div class="share-buttons" style="max-width:800px; margin:auto;">
+  <div class="share-buttons">
     <button onclick="copiarMensaje()">📋 Copiar</button>
     <button onclick="compartirWhatsApp()">🟢 WhatsApp</button>
     <button onclick="compartirTelegram()">🔵 Telegram</button>
   </div>
 
   <script>
-    const regiones = {"Latinoamérica": [["Argentina", "🇦🇷", "America/Argentina/Buenos_Aires"], ["México", "🇲🇽", "America/Mexico_City"], ["Colombia", "🇨🇴", "America/Bogota"], ["Chile", "🇨🇱", "America/Santiago"], ["Perú", "🇵🇪", "America/Lima"], ["Uruguay", "🇺🇾", "America/Montevideo"], ["Paraguay", "🇵🇾", "America/Asuncion"], ["Bolivia", "🇧🇴", "America/La_Paz"], ["Ecuador", "🇪🇨", "America/Guayaquil"], ["Venezuela", "🇻🇪", "America/Caracas"], ["Cuba", "🇨🇺", "America/Havana"], ["Rep. Dominicana", "🇩🇴", "America/Santo_Domingo"]], "América del Norte": [["Estados Unidos (EST)", "🇺🇸", "America/New_York"], ["Estados Unidos (PST)", "🇺🇸", "America/Los_Angeles"], ["Canadá (Toronto)", "🇨🇦", "America/Toronto"], ["Canadá (Vancouver)", "🇨🇦", "America/Vancouver"]], "Europa": [["España", "🇪🇸", "Europe/Madrid"], ["Francia", "🇫🇷", "Europe/Paris"], ["Alemania", "🇩🇪", "Europe/Berlin"], ["Italia", "🇮🇹", "Europe/Rome"], ["Reino Unido", "🇬🇧", "Europe/London"], ["Países Bajos", "🇳🇱", "Europe/Amsterdam"], ["Portugal", "🇵🇹", "Europe/Lisbon"], ["Suecia", "🇸🇪", "Europe/Stockholm"], ["Noruega", "🇳🇴", "Europe/Oslo"]], "África": [["Sudáfrica", "🇿🇦", "Africa/Johannesburg"], ["Egipto", "🇪🇬", "Africa/Cairo"], ["Nigeria", "🇳🇬", "Africa/Lagos"], ["Kenia", "🇰🇪", "Africa/Nairobi"], ["Marruecos", "🇲🇦", "Africa/Casablanca"]], "Asia": [["China", "🇨🇳", "Asia/Shanghai"], ["India", "🇮🇳", "Asia/Kolkata"], ["Japón", "🇯🇵", "Asia/Tokyo"], ["Corea del Sur", "🇰🇷", "Asia/Seoul"], ["Tailandia", "🇹🇭", "Asia/Bangkok"], ["Indonesia", "🇮🇩", "Asia/Jakarta"], ["Emiratos Árabes", "🇦🇪", "Asia/Dubai"]], "Oceanía": [["Australia (Sydney)", "🇦🇺", "Australia/Sydney"], ["Australia (Perth)", "🇦🇺", "Australia/Perth"], ["Nueva Zelanda", "🇳🇿", "Pacific/Auckland"], ["Fiyi", "🇫🇯", "Pacific/Fiji"]]};
-
     function generarMensaje() {
       const DateTime = luxon.DateTime;
       const nombre = document.getElementById("nombre").value;
@@ -138,22 +186,20 @@
       const link = document.getElementById("link").value;
       const fecha = document.getElementById("fecha").value;
       const hora = document.getElementById("hora").value;
+      const paisesSeleccionados = Array.from(document.getElementById("paises").selectedOptions)
+        .map(opt => opt.value.split('|'));
 
-      if (!fecha || !hora) return;
+      if (!fecha || !hora || paisesSeleccionados.length === 0) return;
 
       const dtOriginal = DateTime.fromISO(`${fecha}T${hora}`, { zone: 'local' });
       let horarios = `🕒 Horarios Internacionales:\n\n`;
 
-      Object.entries(regiones).forEach(([region, paises]) => {
-        horarios += `🌎${region}\n`;
-        paises.forEach(([nombrePais, bandera, zona]) => {
-          const zonaLocal = dtOriginal.setZone(zona);
-          horarios += `${bandera} ${nombrePais} ⏰ ${zonaLocal.toFormat("HH:mm")} (${zonaLocal.toFormat("hh:mm a")})\n`;
-        });
-        horarios += '\n';
+      paisesSeleccionados.forEach(([nombrePais, bandera, zona]) => {
+        const zonaLocal = dtOriginal.setZone(zona);
+        horarios += `${bandera} ${nombrePais} ⏰ ${zonaLocal.toFormat("HH:mm")} (${zonaLocal.toFormat("hh:mm a")})\n`;
       });
 
-      const mensaje = `📌 *${titulo}*\n👤 Organiza: ${nombre}\n📝 ${comentarios}\n📅 Fecha: ${fecha}\n🕐 Hora: ${hora} (hora local)\n🔗 Enlace: ${link}\n\n${horarios}{saludo}`;
+      const mensaje = `📌 *${titulo}*\n👤 Organiza: ${nombre}\n📝 ${comentarios}\n📅 Fecha: ${fecha}\n🕐 Hora: ${hora} (hora local)\n🔗 Enlace: ${link}\n\n${horarios}\n💬 ${saludo}`;
 
       document.getElementById("preview").innerText = mensaje;
     }

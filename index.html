@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coordinador de Reuniones Internacional</title>
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #e7f0f7;
+      padding: 20px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #1a1a1a;
+    }
+    form {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    label {
+      font-weight: 600;
+      display: block;
+      margin-top: 15px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    textarea {
+      resize: vertical;
+      height: 100px;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      padding: 12px 18px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #preview, #timezone-display {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f1f9ff;
+      border-left: 4px solid #007bff;
+      border-radius: 8px;
+      white-space: pre-wrap;
+    }
+    .share-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .share-buttons button {
+      flex: 1;
+    }
+  
+    @media (max-width: 768px) {
+      form, .share-buttons {
+        padding: 20px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      input, textarea, button {
+        font-size: 1rem;
+      }
+      .share-buttons {
+        flex-direction: column;
+      }
+    }
+    </style>
+</head>
+<body>
+  <h1>Coordinador de Reuniones Internacional 🌐</h1>
+  <form id="meeting-form">
+    <label>Nombre de la Empresa o Persona</label>
+    <input type="text" id="nombre" required />
+
+    <label>Título de la Reunión</label>
+    <input type="text" id="titulo" style="text-transform: uppercase; font-weight: bold;" required />
+
+    <label>Comentarios</label>
+    <textarea id="comentarios" required></textarea>
+
+    <label>Link de la Reunión</label>
+    <input type="url" id="link" placeholder="https://meet.google.com/..." required />
+
+    <label>Saludo de Despedida</label>
+    <input type="text" id="saludo" required />
+
+    <label>Fecha de la Reunión</label>
+    <input type="date" id="fecha" required />
+
+    <label>Hora de la Reunión</label>
+    <input type="time" id="hora" required />
+
+    <button type="button" onclick="generarMensaje()">Generar y Compartir</button>
+  </form>
+
+  <div id="preview"></div>
+
+  <div class="share-buttons" style="max-width:800px; margin:auto;">
+    <button onclick="copiarMensaje()">📋 Copiar</button>
+    <button onclick="compartirWhatsApp()">🟢 WhatsApp</button>
+    <button onclick="compartirTelegram()">🔵 Telegram</button>
+  </div>
+
+  <script>
+    const regiones = {"Latinoamérica": [["Argentina", "🇦🇷", "America/Argentina/Buenos_Aires"], ["México", "🇲🇽", "America/Mexico_City"], ["Colombia", "🇨🇴", "America/Bogota"], ["Chile", "🇨🇱", "America/Santiago"], ["Perú", "🇵🇪", "America/Lima"], ["Uruguay", "🇺🇾", "America/Montevideo"], ["Paraguay", "🇵🇾", "America/Asuncion"], ["Bolivia", "🇧🇴", "America/La_Paz"], ["Ecuador", "🇪🇨", "America/Guayaquil"], ["Venezuela", "🇻🇪", "America/Caracas"], ["Cuba", "🇨🇺", "America/Havana"], ["Rep. Dominicana", "🇩🇴", "America/Santo_Domingo"]], "América del Norte": [["Estados Unidos (EST)", "🇺🇸", "America/New_York"], ["Estados Unidos (PST)", "🇺🇸", "America/Los_Angeles"], ["Canadá (Toronto)", "🇨🇦", "America/Toronto"], ["Canadá (Vancouver)", "🇨🇦", "America/Vancouver"]], "Europa": [["España", "🇪🇸", "Europe/Madrid"], ["Francia", "🇫🇷", "Europe/Paris"], ["Alemania", "🇩🇪", "Europe/Berlin"], ["Italia", "🇮🇹", "Europe/Rome"], ["Reino Unido", "🇬🇧", "Europe/London"], ["Países Bajos", "🇳🇱", "Europe/Amsterdam"], ["Portugal", "🇵🇹", "Europe/Lisbon"], ["Suecia", "🇸🇪", "Europe/Stockholm"], ["Noruega", "🇳🇴", "Europe/Oslo"]], "África": [["Sudáfrica", "🇿🇦", "Africa/Johannesburg"], ["Egipto", "🇪🇬", "Africa/Cairo"], ["Nigeria", "🇳🇬", "Africa/Lagos"], ["Kenia", "🇰🇪", "Africa/Nairobi"], ["Marruecos", "🇲🇦", "Africa/Casablanca"]], "Asia": [["China", "🇨🇳", "Asia/Shanghai"], ["India", "🇮🇳", "Asia/Kolkata"], ["Japón", "🇯🇵", "Asia/Tokyo"], ["Corea del Sur", "🇰🇷", "Asia/Seoul"], ["Tailandia", "🇹🇭", "Asia/Bangkok"], ["Indonesia", "🇮🇩", "Asia/Jakarta"], ["Emiratos Árabes", "🇦🇪", "Asia/Dubai"]], "Oceanía": [["Australia (Sydney)", "🇦🇺", "Australia/Sydney"], ["Australia (Perth)", "🇦🇺", "Australia/Perth"], ["Nueva Zelanda", "🇳🇿", "Pacific/Auckland"], ["Fiyi", "🇫🇯", "Pacific/Fiji"]]};
+
+    function generarMensaje() {
+      const DateTime = luxon.DateTime;
+      const nombre = document.getElementById("nombre").value;
+      const titulo = document.getElementById("titulo").value.toUpperCase();
+      const comentarios = document.getElementById("comentarios").value;
+      const saludo = document.getElementById("saludo").value;
+      const link = document.getElementById("link").value;
+      const fecha = document.getElementById("fecha").value;
+      const hora = document.getElementById("hora").value;
+
+      if (!fecha || !hora) return;
+
+      const dtOriginal = DateTime.fromISO(`${fecha}T${hora}`, { zone: 'local' });
+      let horarios = `🕒 Horarios Internacionales:\n\n`;
+
+      Object.entries(regiones).forEach(([region, paises]) => {
+        horarios += `🌎${region}\n`;
+        paises.forEach(([nombrePais, bandera, zona]) => {
+          const zonaLocal = dtOriginal.setZone(zona);
+          horarios += `${bandera} ${nombrePais} ⏰ ${zonaLocal.toFormat("HH:mm")} (${zonaLocal.toFormat("hh:mm a")})\n`;
+        });
+        horarios += '\n';
+      });
+
+      const mensaje = `📌 *${titulo}*\n👤 Organiza: ${nombre}\n📝 ${comentarios}\n📅 Fecha: ${fecha}\n🕐 Hora: ${hora} (hora local)\n🔗 Enlace: ${link}\n\n${horarios}{saludo}`;
+
+      document.getElementById("preview").innerText = mensaje;
+    }
+
+    function copiarMensaje() {
+      const texto = document.getElementById("preview").innerText;
+      navigator.clipboard.writeText(texto).then(() => {
+        alert("Mensaje copiado al portapapeles.");
+      });
+    }
+
+    function compartirWhatsApp() {
+      const texto = encodeURIComponent(document.getElementById("preview").innerText);
+      window.open(`https://wa.me/?text=${texto}`, '_blank');
+    }
+
+    function compartirTelegram() {
+      const texto = encodeURIComponent(document.getElementById("preview").innerText);
+      window.open(`https://t.me/share/url?text=${texto}`, '_blank');
+    }
+  </script>
+</body>
+</html>

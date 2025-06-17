@@ -3,85 +3,22 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Coordinador de Reuniones Internacional</title>
-  <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #e7f0f7;
-      padding: 20px;
-      color: #333;
-    }
-    h1 {
-      text-align: center;
-      color: #1a1a1a;
-    }
-    form {
-      max-width: 800px;
-      margin: 0 auto;
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    label {
-      font-weight: 600;
-      display: block;
-      margin-top: 15px;
-    }
-    input, textarea, select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-    }
-    textarea {
-      resize: vertical;
-      height: 100px;
-    }
-    button {
-      background: #007bff;
-      color: white;
-      padding: 12px 18px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-    button:hover {
-      background: #0056b3;
-    }
-    #preview {
-      margin-top: 30px;
-      padding: 20px;
-      background: #f1f9ff;
-      border-left: 4px solid #007bff;
-      border-radius: 8px;
-      white-space: pre-wrap;
-    }
-    .share-buttons {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-      max-width: 800px;
-      margin-inline: auto;
-    }
-    .share-buttons button {
-      flex: 1;
-    }
-    @media (max-width: 768px) {
-      form, .share-buttons {
-        padding: 20px;
-        width: 100%;
-      }
-      .share-buttons {
-        flex-direction: column;
-      }
-    }
-  </style>
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js">document.addEventListener("DOMContentLoaded", () => {
+  const ayuda = document.getElementById("ayuda-seleccion");
+  if (esMovil) {
+    ayuda.textContent = "Tocá varias veces para seleccionar varios países.";
+  } else {
+    ayuda.textContent = "Podés elegir varios. En PC: Ctrl + clic.";
+  }
+});
+</script>
+  <style>$1
+@media (max-width: 600px) {
+  .share-buttons button:nth-child(2) {
+    font-size: 1.2rem;
+    background-color: #25D366;
+  }
+}</style>
 </head>
 <body>
   <h1>Coordinador de Reuniones Internacional 🌐</h1>
@@ -96,17 +33,21 @@
 <label>Link de la Reunión</label>
 <input type="url" id="link" placeholder="https://meet.google.com/..." required />
 
+<small style="color: #666; display: block; margin-top: 4px;">Recordá pegar el enlace de tu reunión.</small>
+
 <label>Saludo de Despedida</label>
-<input type="text" id="saludo" required />
+<input type="text" id="saludo" required placeholder="Ej: ¡Nos vemos en la reunión!" />
 
 <label>Fecha de la Reunión</label>
 <input type="date" id="fecha" required />
 
 <label>Hora de la Reunión</label>
-<input type="time" id="hora" required />
+
+<small style="color: #666; display: block; margin-top: 4px;">Asegurate de que la hora de tu dispositivo esté correctamente configurada.</small> <input type="time" id="hora" required />
 
 <label>Seleccioná los países participantes</label>
-<select id="paises" multiple size="10" required></select>
+
+<small style="color: #666; display: block; margin-top: 4px;" id="ayuda-seleccion"></small> <select id="paises" multiple size="10" required></select>
 
 <button type="button" onclick="generarMensaje()">Generar y Compartir</button>
 
@@ -118,6 +59,7 @@
     const regiones = {"Latinoamérica":[["Argentina","🇦🇷","America/Argentina/Buenos_Aires"],["Brasil","🇧🇷","America/Sao_Paulo"],["México","🇲🇽","America/Mexico_City"],["Colombia","🇨🇴","America/Bogota"],["Chile","🇨🇱","America/Santiago"],["Perú","🇵🇪","America/Lima"],["Uruguay","🇺🇾","America/Montevideo"],["Paraguay","🇵🇾","America/Asuncion"],["Bolivia","🇧🇴","America/La_Paz"],["Ecuador","🇪🇨","America/Guayaquil"],["Venezuela","🇻🇪","America/Caracas"],["Cuba","🇨🇺","America/Havana"],["República Dominicana","🇩🇴","America/Santo_Domingo"],["Guatemala","🇬🇹","America/Guatemala"],["Honduras","🇭🇳","America/Tegucigalpa"],["El Salvador","🇸🇻","America/El_Salvador"],["Nicaragua","🇳🇮","America/Managua"],["Costa Rica","🇨🇷","America/Costa_Rica"],["Panamá","🇵🇦","America/Panama"]],"América del Norte":[["Estados Unidos (EST)","🇺🇸","America/New_York"],["Estados Unidos (CST)","🇺🇸","America/Chicago"],["Estados Unidos (MST)","🇺🇸","America/Denver"],["Estados Unidos (PST)","🇺🇸","America/Los_Angeles"],["Canadá (Toronto)","🇨🇦","America/Toronto"],["Canadá (Vancouver)","🇨🇦","America/Vancouver"],["Canadá (Montreal)","🇨🇦","America/Montreal"]],"Europa":[["España","🇪🇸","Europe/Madrid"],["Francia","🇫🇷","Europe/Paris"],["Alemania","🇩🇪","Europe/Berlin"],["Italia","🇮🇹","Europe/Rome"],["Reino Unido","🇬🇧","Europe/London"],["Países Bajos","🇳🇱","Europe/Amsterdam"],["Portugal","🇵🇹","Europe/Lisbon"],["Suecia","🇸🇪","Europe/Stockholm"],["Noruega","🇳🇴","Europe/Oslo"],["Grecia","🇬🇷","Europe/Athens"],["Suiza","🇨🇭","Europe/Zurich"],["Austria","🇦🇹","Europe/Vienna"],["Irlanda","🇮🇪","Europe/Dublin"],["Polonia","🇵🇱","Europe/Warsaw"],["Ucrania","🇺🇦","Europe/Kyiv"]],"África":[["Sudáfrica","🇿🇦","Africa/Johannesburg"],["Egipto","🇪🇬","Africa/Cairo"],["Nigeria","🇳🇬","Africa/Lagos"],["Kenia","🇰🇪","Africa/Nairobi"],["Marruecos","🇲🇦","Africa/Casablanca"],["Argelia","🇩🇿","Africa/Algiers"],["Ghana","🇬🇭","Africa/Accra"],["Túnez","🇹🇳","Africa/Tunis"],["Etiopía","🇪🇹","Africa/Addis_Ababa"]],"Asia":[["China","🇨🇳","Asia/Shanghai"],["India","🇮🇳","Asia/Kolkata"],["Japón","🇯🇵","Asia/Tokyo"],["Corea del Sur","🇰🇷","Asia/Seoul"],["Tailandia","🇹🇭","Asia/Bangkok"],["Indonesia","🇮🇩","Asia/Jakarta"],["Filipinas","🇵🇭","Asia/Manila"],["Malasia","🇲🇾","Asia/Kuala_Lumpur"],["Vietnam","🇻🇳","Asia/Ho_Chi_Minh"],["Emiratos Árabes","🇦🇪","Asia/Dubai"],["Arabia Saudita","🇸🇦","Asia/Riyadh"],["Israel","🇮🇱","Asia/Jerusalem"]],"Oceanía":[["Australia (Sydney)","🇦🇺","Australia/Sydney"],["Australia (Perth)","🇦🇺","Australia/Perth"],["Nueva Zelanda","🇳🇿","Pacific/Auckland"],["Fiyi","🇫🇯","Pacific/Fiji"],["Papúa Nueva Guinea","🇵🇬","Pacific/Port_Moresby"]]};
 
     const selector = document.getElementById("paises");
+if (esMovil) selector.size = 15;
     Object.entries(regiones).forEach(([region, paises]) => {
       const optgroup = document.createElement("optgroup");
       optgroup.label = region;
@@ -165,6 +107,7 @@
 📅 Fecha: ${fechaFormateada}
 🕐 Hora: ${hora} (hora local)`\n🔗 Enlace: ${link}\n\n${horarios}💬 ${saludo}`;
       document.getElementById("preview").innerText = mensaje;
+document.getElementById("preview").scrollIntoView({ behavior: 'smooth' });
     }
 
     function copiarMensaje() {
@@ -181,5 +124,19 @@
       const texto = encodeURIComponent(document.getElementById("preview").innerText);
       window.open(`https://t.me/share/url?text=${texto}`, '_blank');
     }
-  </script></body>
+  </script><div id="google_translate_element" style="text-align:right; margin-top: 20px;"></div>
+<script type="text/javascript">
+// Detectar si es móvil
+const esMovil = /Mobi|Android/i.test(navigator.userAgent);
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    {pageLanguage: 'es', layout: google.translate.TranslateElement.InlineLayout.SIMPLE},
+    'google_translate_element'
+  );
+}
+</script>
+<script type="text/javascript"
+  src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+</script>
+</body>
 </html>

@@ -2,141 +2,161 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Coordinador de Reuniones</title>
   <style>
-    body {
-      font-family: sans-serif;
-      padding: 1rem;
-      background-color: #f2f2f2;
-      color: #333;
+    :root {
+      --primary-bg: #ffffff;
+      --primary-text: #000000;
+      --secondary-bg: #f3f3f3;
+      --card-bg: #ffffff;
     }
 
-    .dark-mode {
-      background-color: #121212;
-      color: #f2f2f2;
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --primary-bg: #121212;
+        --primary-text: #ffffff;
+        --secondary-bg: #1e1e1e;
+        --card-bg: #2c2c2c;
+      }
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: var(--primary-bg);
+      color: var(--primary-text);
+      padding: 1em;
     }
 
     h1 {
       text-align: center;
+      margin-bottom: 0.5em;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background-color: var(--card-bg);
+      padding: 1.5em;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
     }
 
     textarea {
       width: 100%;
-      height: 250px;
-      margin-top: 1rem;
-      font-size: 1rem;
+      height: 200px;
+      padding: 1em;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      resize: vertical;
+      background-color: var(--secondary-bg);
+      color: var(--primary-text);
     }
 
-    button, select, input, textarea {
-      margin: 0.5rem 0;
-      padding: 0.5rem;
-      font-size: 1rem;
-      width: 100%;
-    }
-
-    .region {
-      font-weight: bold;
-      margin-top: 1rem;
-    }
-
-    .icon-button {
+    .button-group {
+      margin-top: 1em;
       display: flex;
-      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
       justify-content: center;
-      gap: 0.5rem;
-      padding: 0.6rem 1rem;
+    }
+
+    button, .share-btn {
+      padding: 0.8em 1.2em;
+      font-size: 1em;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 1rem;
-      font-weight: bold;
-      transition: background 0.3s ease;
-      width: 100%;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .whatsapp-button {
-      background-color: #25D366;
+    button.copy-btn {
+      background-color: #007bff;
       color: white;
     }
 
-    .whatsapp-button:hover {
-      background-color: #1ebe5d;
+    .share-btn {
+      background-color: #f0f0f0;
+      color: #333;
+      text-decoration: none;
     }
 
-    .telegram-button {
-      background-color: #0088cc;
-      color: white;
+    .share-btn:hover,
+    button:hover {
+      opacity: 0.9;
     }
 
-    .telegram-button:hover {
-      background-color: #007bb5;
-    }
-
-    .icon-button svg {
+    .whatsapp-icon {
       width: 20px;
       height: 20px;
-      fill: white;
+      fill: #25d366;
     }
 
-    .buttons-container {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-top: 1rem;
+    .telegram-icon {
+      width: 20px;
+      height: 20px;
+      fill: #0088cc;
     }
 
-    @media(min-width: 600px) {
-      .buttons-container {
-        flex-direction: row;
-        justify-content: space-between;
-      }
-
-      button, .icon-button {
-        width: auto;
-        flex: 1;
+    @media (max-width: 600px) {
+      .button-group {
+        flex-direction: column;
+        align-items: stretch;
       }
     }
   </style>
 </head>
 <body>
-  <h1>Coordinador de Reuniones</h1>
-  <!-- (todo el formulario e interfaz iría aquí, que ya está en tu versión anterior) -->
+  <div class="container">
+    <h1>Mensaje Generado</h1>
+    <textarea id="generatedMessage" readonly>🏢 EMPRESA EJEMPLO
+📌 REUNIÓN DE EQUIPO
+Nos reuniremos para revisar el progreso del proyecto.
 
-  <div class="buttons-container">
-    <button class="icon-button whatsapp-button" id="whatsappShare">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-        <path d="M16.004 2.003a13.997 13.997 0 00-12.064 21.018l-1.313 4.805 4.938-1.296A13.997 13.997 0 1016.004 2.003zm0 2c6.627 0 12 5.373 12 12a11.93 11.93 0 01-2.141 6.782l.699 2.553-2.618-.688A11.963 11.963 0 0116.004 4.003zm-5.373 7.084c-.235.526-.353 1.105-.353 1.724 0 3.626 2.95 6.574 6.574 6.574.62 0 1.2-.118 1.727-.353l1.588.421a1 1 0 001.21-1.21l-.421-1.588a4.94 4.94 0 00.353-1.727c0-3.624-2.948-6.574-6.574-6.574a4.944 4.944 0 00-1.727.353l-1.588-.421a1 1 0 00-1.21 1.21l.421 1.588z"/>
-      </svg>
-      WhatsApp
-    </button>
+🗓️ Fecha: 20 de junio
+🕒 Hora del anfitrión: 2:00 PM
 
-    <button class="icon-button telegram-button" id="telegramShare">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
-        <path d="M120 0C53.72 0 0 53.72 0 120c0 66.28 53.72 120 120 120 66.28 0 120-53.72 120-120C240 53.72 186.28 0 120 0zm55.88 84.71l-18.84 88.78c-1.42 6.26-5.13 7.82-10.4 4.87l-28.74-21.2-13.88 13.36c-1.54 1.54-2.84 2.84-5.83 2.84l2.1-29.78 54.18-48.97c2.35-2.1-.51-3.28-3.63-1.18l-66.94 42.1-28.84-9.01c-6.26-1.97-6.4-6.26 1.32-9.27l112.94-43.62c5.26-1.97 9.85 1.18 8.16 9.11z"/>
-      </svg>
-      Telegram
-    </button>
+🌎 LATINOAMÉRICA:
+🇦🇷 Argentina: 2:00 PM
+🇲🇽 México: 12:00 PM
+
+📍 Enlace de reunión: https://meet.example.com
+
+¡Los esperamos!</textarea>
+
+    <div class="button-group">
+      <button class="copy-btn" onclick="copyMessage()">📋 Copiar</button>
+      <a class="share-btn" id="whatsappShare" target="_blank">
+        <svg class="whatsapp-icon" viewBox="0 0 32 32">
+          <path d="M16 .6C7.6.6.6 7.6.6 16c0 2.8.8 5.4 2.2 7.7L0 32l8.5-2.2C11 31 13.4 31.4 16 31.4c8.4 0 15.4-7 15.4-15.4S24.4.6 16 .6zm0 28c-2.3 0-4.6-.6-6.6-1.8l-.5-.3-5 1.3 1.3-4.8-.3-.5c-1.1-2-1.7-4.2-1.7-6.4 0-7.4 6-13.4 13.4-13.4s13.4 6 13.4 13.4S23.4 28.6 16 28.6zm7.8-10.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2s-.8 1-1 1.2c-.2.2-.4.3-.8.1s-1.5-.6-2.8-1.9c-1-1-1.6-2.2-1.8-2.6-.2-.4 0-.6.2-.8s.4-.5.6-.8c.2-.3.2-.5.3-.7.1-.2 0-.5-.1-.7s-.7-1.6-.9-2.2c-.2-.5-.5-.4-.7-.4s-.4 0-.7 0-.6.1-.9.4c-.3.3-1.1 1.1-1.1 2.6s1.1 3 1.3 3.2c.2.3 2.1 3.3 5 4.6.7.3 1.2.5 1.6.6.7.2 1.3.1 1.8.1.6-.1 1.8-.8 2.1-1.5s.3-1.4.2-1.5c-.1-.1-.3-.2-.6-.3z"/>
+        </svg>
+        Compartir por WhatsApp
+      </a>
+      <a class="share-btn" id="telegramShare" target="_blank">
+        <svg class="telegram-icon" viewBox="0 0 32 32">
+          <path d="M29.9 3.3L2.4 14.3c-1.1.5-1.1 1.3-.2 1.6l6.9 2.1 2.6 8c.3.9.5 1.2 1.4 1.2.9 0 1.2-.4 1.6-.9l3.8-4.6 7.9 5.8c1.5.8 2.6.4 3-1.3L32 5.3c.3-1.5-.6-2.2-2.1-2z"/>
+        </svg>
+        Compartir por Telegram
+      </a>
+    </div>
   </div>
 
-  <textarea id="messagePreview" readonly></textarea>
-
   <script>
-    const whatsappBtn = document.getElementById("whatsappShare");
-    const telegramBtn = document.getElementById("telegramShare");
-    const preview = document.getElementById("messagePreview");
+    function copyMessage() {
+      const message = document.getElementById("generatedMessage").value;
+      navigator.clipboard.writeText(message).then(() => {
+        alert("Mensaje copiado al portapapeles");
+      });
+    }
 
-    whatsappBtn.addEventListener("click", () => {
-      const text = encodeURIComponent(preview.value);
-      const url = `https://wa.me/?text=${text}`;
-      window.open(url, "_blank");
-    });
-
-    telegramBtn.addEventListener("click", () => {
-      const text = encodeURIComponent(preview.value);
-      const url = `https://t.me/share/url?url=&text=${text}`;
-      window.open(url, "_blank");
-    });
+    // Compartir por WhatsApp y Telegram
+    const message = encodeURIComponent(document.getElementById("generatedMessage").value);
+    document.getElementById("whatsappShare").href = `https://wa.me/?text=${message}`;
+    document.getElementById("telegramShare").href = `https://t.me/share/url?text=${message}`;
   </script>
 </body>
 </html>

@@ -204,7 +204,300 @@
       ]
     };
 
-    // Aquí continúa el script (para no cortarlo, dime si quieres que siga la parte JS completa ahora)
+    //<script>
+  // Detección idioma navegador y traducción simple ES/EN
+  const lang = navigator.language.startsWith('en') ? 'en' : 'es';
+
+  const translations = {
+    es: {
+      title: "Coordinador de Reuniones Multizona",
+      companyLabel: "Empresa",
+      meetingTitleLabel: "Título de la reunión",
+      descriptionLabel: "Descripción",
+      hostDateTimeLabel: "Fecha y hora del anfitrión",
+      hostCountryLabel: "País del anfitrión",
+      linkLabel: "Enlace a la videollamada",
+      countriesLabel: "Selecciona los países",
+      searchPlaceholder: "Buscar país...",
+      farewellLabel: "Mensaje de despedida",
+      generateButton: "Generar Mensaje",
+      copyButton: "📋 Copiar",
+      whatsappButton: "📱 WhatsApp",
+      telegramButton: "✈️ Telegram",
+      discordButton: "💬 Discord",
+      placeholderCompany: "Nombre de la empresa",
+      placeholderTitle: "Ej: Reunión Estratégica",
+      placeholderDescription: "Descripción breve de la reunión",
+      placeholderLink: "https://...",
+      placeholderFarewell: "¡Los esperamos!",
+      licenseText: "© 2025 - Herramienta desarrollada por el autor bajo Licencia Creative Commons Atribución 4.0 Internacional (CC BY 4.0)."
+    },
+    en: {
+      title: "Multi-timezone Meeting Coordinator",
+      companyLabel: "Company",
+      meetingTitleLabel: "Meeting Title",
+      descriptionLabel: "Description",
+      hostDateTimeLabel: "Host Date and Time",
+      hostCountryLabel: "Host Country",
+      linkLabel: "Video Call Link",
+      countriesLabel: "Select Countries",
+      searchPlaceholder: "Search country...",
+      farewellLabel: "Farewell Message",
+      generateButton: "Generate Message",
+      copyButton: "📋 Copy",
+      whatsappButton: "📱 WhatsApp",
+      telegramButton: "✈️ Telegram",
+      discordButton: "💬 Discord",
+      placeholderCompany: "Company name",
+      placeholderTitle: "Ex: Strategic Meeting",
+      placeholderDescription: "Brief description of the meeting",
+      placeholderLink: "https://...",
+      placeholderFarewell: "Looking forward to seeing you!",
+      licenseText: "© 2025 - Tool developed by the author under Creative Commons Attribution 4.0 International License (CC BY 4.0)."
+    }
+  };
+
+  function translateUI() {
+    const t = translations[lang];
+    document.getElementById('title').textContent = t.title;
+    document.getElementById('companyLabel').textContent = t.companyLabel;
+    document.getElementById('meetingTitleLabel').textContent = t.meetingTitleLabel;
+    document.getElementById('descriptionLabel').textContent = t.descriptionLabel;
+    document.getElementById('hostDateTimeLabel').textContent = t.hostDateTimeLabel;
+    document.getElementById('hostCountryLabel').textContent = t.hostCountryLabel;
+    document.getElementById('linkLabel').textContent = t.linkLabel;
+    document.getElementById('countriesLabel').textContent = t.countriesLabel;
+    document.getElementById('searchCountry').placeholder = t.searchPlaceholder;
+    document.getElementById('farewellLabel').textContent = t.farewellLabel;
+    document.getElementById('generateButton').textContent = t.generateButton;
+
+    const shareButtons = document.querySelectorAll('.share-buttons button');
+    shareButtons[0].textContent = t.copyButton;
+    shareButtons[1].textContent = t.whatsappButton;
+    shareButtons[2].textContent = t.telegramButton;
+    shareButtons[3].textContent = t.discordButton;
+
+    document.getElementById('company').placeholder = t.placeholderCompany;
+    document.getElementById('meetingTitle').placeholder = t.placeholderTitle;
+    document.getElementById('description').placeholder = t.placeholderDescription;
+    document.getElementById('link').placeholder = t.placeholderLink;
+    document.getElementById('farewell').placeholder = t.placeholderFarewell;
+
+    document.querySelector('.license').innerHTML = t.licenseText;
+  }
+
+  // Carga países en los select
+  function loadCountries() {
+    const hostCountrySelect = document.getElementById('hostCountry');
+    const countriesSelect = document.getElementById('countries');
+    hostCountrySelect.innerHTML = '';
+    countriesSelect.innerHTML = '';
+
+    for (const region in countries) {
+      // Host country select - opciones simples
+      const optgroupHost = document.createElement('optgroup');
+      optgroupHost.label = region;
+      countries[region].forEach(country => {
+        const option = document.createElement('option');
+        option.value = country.name;
+        option.textContent = `${country.emoji} ${country.name}`;
+        optgroupHost.appendChild(option);
+      });
+      hostCountrySelect.appendChild(optgroupHost);
+
+      // Countries select multiple con optgroups
+      const optgroup = document.createElement('optgroup');
+      optgroup.label = region;
+      countries[region].forEach(country => {
+        const option = document.createElement('option');
+        option.value = country.name;
+        option.textContent = `${country.emoji} ${country.name}`;
+        optgroup.appendChild(option);
+      });
+      countriesSelect.appendChild(optgroup);
+    }
+
+    // Por defecto, seleccionar el primer país en hostCountry
+    if(hostCountrySelect.options.length > 0) {
+      hostCountrySelect.selectedIndex = 0;
+    }
+  }
+
+  // Filtro para buscador de países
+  function filterCountries() {
+    const filter = document.getElementById('searchCountry').value.toLowerCase();
+    const countriesSelect = document.getElementById('countries');
+    for (let i = 0; i < countriesSelect.options.length; i++) {
+      const option = countriesSelect.options[i];
+      option.style.display = option.textContent.toLowerCase().includes(filter) ? '' : 'none';
+    }
+  }
+
+  // Convierte título a mayúsculas
+  function toUpperBold() {
+    const input = document.getElementById('meetingTitle');
+    input.value = input.value.toUpperCase();
+  }
+
+  // Convierte fecha ISO local a Date en UTC para uso de Intl
+  function parseLocalDateTimeLocal(inputValue) {
+    // inputValue: "YYYY-MM-DDTHH:MM"
+    const [date, time] = inputValue.split('T');
+    if (!date || !time) return null;
+    // Crear objeto Date con zona local
+    const [year, month, day] = date.split('-').map(Number);
+    const [hour, minute] = time.split(':').map(Number);
+    return new Date(year, month - 1, day, hour, minute);
+  }
+
+  // Convierte hora del anfitrión a hora en zona del país en formato 12h AM/PM
+  function convertToTimeZone(date, timeZone) {
+    if (!date) return '—';
+    try {
+      const options = {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+        timeZone: timeZone
+      };
+      return new Intl.DateTimeFormat(lang === 'es' ? 'es-ES' : 'en-US', options).format(date);
+    } catch {
+      return '—';
+    }
+  }
+
+  // Genera mensaje formateado con emojis y regiones agrupadas
+  function generateMessage() {
+    const company = document.getElementById('company').value.trim();
+    const title = document.getElementById('meetingTitle').value.trim().toUpperCase();
+    const description = document.getElementById('description').value.trim();
+    const hostDateTimeInput = document.getElementById('hostDateTime').value;
+    const hostCountry = document.getElementById('hostCountry').value;
+    const link = document.getElementById('link').value.trim();
+    const farewell = document.getElementById('farewell').value.trim() || (lang === 'es' ? '¡Los esperamos!' : 'Looking forward to seeing you!');
+    const selectedCountries = Array.from(document.getElementById('countries').selectedOptions).map(o => o.value);
+
+    if (!title) {
+      alert(lang === 'es' ? 'Por favor ingresa el título de la reunión.' : 'Please enter the meeting title.');
+      return;
+    }
+    if (!hostDateTimeInput) {
+      alert(lang === 'es' ? 'Por favor selecciona fecha y hora del anfitrión.' : 'Please select host date and time.');
+      return;
+    }
+    if (!hostCountry) {
+      alert(lang === 'es' ? 'Por favor selecciona el país del anfitrión.' : 'Please select the host country.');
+      return;
+    }
+    if (selectedCountries.length === 0) {
+      alert(lang === 'es' ? 'Por favor selecciona al menos un país para la reunión.' : 'Please select at least one country for the meeting.');
+      return;
+    }
+
+    const hostDate = parseLocalDateTimeLocal(hostDateTimeInput);
+    if (!hostDate) {
+      alert(lang === 'es' ? 'Fecha y hora inválidas.' : 'Invalid date and time.');
+      return;
+    }
+
+    // Buscar zona horaria anfitrión
+    let hostTz = null;
+    outerHost:
+    for (const region in countries) {
+      for (const c of countries[region]) {
+        if (c.name === hostCountry) {
+          hostTz = c.tz;
+          break outerHost;
+        }
+      }
+    }
+    if (!hostTz) {
+      alert(lang === 'es' ? 'Zona horaria del país anfitrión no encontrada.' : 'Host country time zone not found.');
+      return;
+    }
+
+    // Fecha y hora en zona anfitrión en formato largo
+    const hostDateString = new Intl.DateTimeFormat(lang === 'es' ? 'es-ES' : 'en-US', {
+      dateStyle: 'full',
+      timeStyle: 'short',
+      timeZone: hostTz,
+      hour12: true
+    }).format(hostDate);
+
+    // Construir mensaje
+    let message = '';
+    if(company) message += `🏢 ${company}\n`;
+    message += `📌 *${title}*\n`;
+    if(description) message += `${description}\n`;
+    message += (lang === 'es' ? '🗓️ Fecha y hora del anfitrión' : '🗓️ Host date and time') + `: ${hostDateString}\n`;
+    message += `${lang === 'es' ? '🌐 País anfitrión' : '🌐 Host country'}: ${hostCountry}\n`;
+    if(link) message += `${lang === 'es' ? '🔗 Enlace a la videollamada' : '🔗 Video call link'}: ${link}\n\n`;
+
+    // Agrupar por región solo los países seleccionados, ordenados alfabéticamente
+    const selectedByRegion = {};
+    for (const region in countries) {
+      const filtered = countries[region].filter(c => selectedCountries.includes(c.name));
+      if (filtered.length > 0) {
+        selectedByRegion[region] = filtered.sort((a, b) => a.name.localeCompare(b.name));
+      }
+    }
+
+    for (const region in selectedByRegion) {
+      message += (lang === 'es' ? '🌍 Región' : '🌍 Region') + `: ${region}\n`;
+      selectedByRegion[region].forEach(c => {
+        const time = convertToTimeZone(hostDate, c.tz);
+        message += `${c.emoji} ${c.name}: ${time}\n`;
+      });
+      message += '\n';
+    }
+
+    message += farewell;
+
+    // Mostrar mensaje con formato markdown (negritas con *)
+    const output = document.getElementById('output');
+    output.textContent = message;
+  }
+
+  // Copiar texto al portapapeles
+  function copyToClipboard() {
+    const output = document.getElementById('output').textContent;
+    if(!output) return alert(lang === 'es' ? 'No hay mensaje para copiar.' : 'No message to copy.');
+    navigator.clipboard.writeText(output).then(() => {
+      alert(lang === 'es' ? 'Mensaje copiado al portapapeles.' : 'Message copied to clipboard.');
+    });
+  }
+
+  // Compartir por plataformas
+  function share(platform) {
+    const output = document.getElementById('output').textContent;
+    if(!output) return alert(lang === 'es' ? 'Genera el mensaje primero.' : 'Generate the message first.');
+
+    let url = '';
+    const encodedMessage = encodeURIComponent(output);
+
+    switch(platform) {
+      case 'whatsapp':
+        url = `https://api.whatsapp.com/send?text=${encodedMessage}`;
+        break;
+      case 'telegram':
+        url = `https://t.me/share/url?url=&text=${encodedMessage}`;
+        break;
+      case 'discord':
+        alert(lang === 'es' ? 'Para compartir en Discord, pega el mensaje directamente en un canal.' : 'To share on Discord, paste the message directly in a channel.');
+        return;
+      default:
+        return;
+    }
+
+    window.open(url, '_blank');
+  }
+
+  // Inicialización al cargar la página
+  window.onload = () => {
+    translateUI();
+    loadCountries();
+  };
+</script>
   </script>
 </body>
 </html>

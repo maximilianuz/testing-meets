@@ -3,24 +3,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Coordinador de Reuniones Internacional</title>
-  <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js">
-function generarSaludoIA() {
-  const saludos = [
-    "¡Nos vemos en la reunión!",
-    "Gracias por tu tiempo y energía 🙌",
-    "Será un gusto compartir con vos 😊",
-    "No faltes, te esperamos con entusiasmo 🎉",
-    "¡Te esperamos en la sala!",
-    "Hasta pronto y gracias por sumarte",
-    "¡Va a estar buenísima, no te la pierdas!",
-    "Conectate puntual, va a ser genial 😉",
-    "¡Gracias por tu interés, nos vemos!",
-    "Un placer contar con tu presencia 💬"
-  ];
-  const campo = document.getElementById("saludo");
-  campo.value = saludos[Math.floor(Math.random() * saludos.length)];
-}
-</script>
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -107,9 +90,20 @@ function generarSaludoIA() {
 <small>Recordá pegar el enlace de tu reunión.</small>
 
 <label>Saludo de Despedida</label>
-<input type="text" id="saludo" placeholder="Ej: ¡Nos vemos en la reunión!" required />
+<select id="saludo" required>
 
-<label>Fecha de la Reunión</label>
+  <option value="">Seleccioná un saludo...</option>
+  <option>¡Nos vemos en la reunión!</option>
+  <option>Gracias por tu tiempo y energía 🙌</option>
+  <option>Será un gusto compartir con vos 😊</option>
+  <option>No faltes, te esperamos con entusiasmo 🎉</option>
+  <option>¡Te esperamos en la sala!</option>
+  <option>Hasta pronto y gracias por sumarte</option>
+  <option>¡Va a estar buenísima, no te la pierdas!</option>
+  <option>Conectate puntual, va a ser genial 😉</option>
+  <option>¡Gracias por tu interés, nos vemos!</option>
+  <option>Un placer contar con tu presencia 💬</option>
+</select><label>Fecha de la Reunión</label>
 <input type="date" id="fecha" required />
 
 <label>Hora de la Reunión</label>
@@ -122,9 +116,7 @@ function generarSaludoIA() {
 
 <button type="button" onclick="generarMensaje()">Generar y Compartir</button>
 
-<button type="button" onclick="generarSaludoIA()">🪄 Sugerir saludo automático</button>
-
-</form>  <div id="preview"></div>  <div class="share-buttons">
+  </form>  <div id="preview"></div>  <div class="share-buttons">
     <button onclick="copiarMensaje()">📋 Copiar</button>
     <button onclick="compartirWhatsApp()">🟢 WhatsApp</button>
     <button onclick="compartirTelegram()">🔵 Telegram</button>

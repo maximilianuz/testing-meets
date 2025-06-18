@@ -1,204 +1,142 @@
-<!DOCTYPE html><html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coordinador de Reuniones Internacional</title>
-  <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Coordinador de Reuniones</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f1f6fb;
+      font-family: sans-serif;
+      padding: 1rem;
+      background-color: #f2f2f2;
       color: #333;
-      padding: 20px;
     }
+
+    .dark-mode {
+      background-color: #121212;
+      color: #f2f2f2;
+    }
+
     h1 {
       text-align: center;
     }
-    form {
-      background: white;
-      padding: 30px;
-      max-width: 800px;
-      margin: auto;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    label {
-      margin-top: 12px;
-      display: block;
-      font-weight: bold;
-    }
-    input, select, textarea {
+
+    textarea {
       width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      height: 250px;
+      margin-top: 1rem;
       font-size: 1rem;
     }
-    button {
-      background: #007bff;
-      color: white;
-      padding: 10px 16px;
+
+    button, select, input, textarea {
+      margin: 0.5rem 0;
+      padding: 0.5rem;
       font-size: 1rem;
-      margin-top: 20px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
+      width: 100%;
     }
-    button:hover {
-      background: #0056b3;
+
+    .region {
+      font-weight: bold;
+      margin-top: 1rem;
     }
-    #preview {
-      margin-top: 30px;
-      padding: 20px;
-      background: #f1f9ff;
-      border-left: 4px solid #007bff;
-      border-radius: 8px;
-      white-space: pre-wrap;
-    }
-    .share-buttons {
-      margin-top: 20px;
+
+    .icon-button {
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      max-width: 800px;
-      margin-inline: auto;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: background 0.3s ease;
+      width: 100%;
     }
-    .share-buttons button {
-      flex: 1;
+
+    .whatsapp-button {
+      background-color: #25D366;
+      color: white;
     }
-    @media (prefers-color-scheme: dark) {
-      body { background: #121212; color: #eee; }
-      form { background: #1e1e1e; color: #eee; }
-      input, select, textarea { background: #2a2a2a; color: #eee; border: 1px solid #555; }
-      #preview { background: #2a3b4c; color: #eee; }
+
+    .whatsapp-button:hover {
+      background-color: #1ebe5d;
+    }
+
+    .telegram-button {
+      background-color: #0088cc;
+      color: white;
+    }
+
+    .telegram-button:hover {
+      background-color: #007bb5;
+    }
+
+    .icon-button svg {
+      width: 20px;
+      height: 20px;
+      fill: white;
+    }
+
+    .buttons-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    @media(min-width: 600px) {
+      .buttons-container {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      button, .icon-button {
+        width: auto;
+        flex: 1;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Coordinador de Reuniones Internacional 🌐</h1>
-  <form id="meeting-form">
-    <label>Nombre de la Empresa o Persona</label>
-    <input type="text" id="nombre" required /><label>Título de la Reunión</label>
-<input type="text" id="titulo" style="text-transform: uppercase; font-weight: bold;" required />
+  <h1>Coordinador de Reuniones</h1>
+  <!-- (todo el formulario e interfaz iría aquí, que ya está en tu versión anterior) -->
 
-<label>Comentarios</label>
-<textarea id="comentarios" required></textarea>
+  <div class="buttons-container">
+    <button class="icon-button whatsapp-button" id="whatsappShare">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+        <path d="M16.004 2.003a13.997 13.997 0 00-12.064 21.018l-1.313 4.805 4.938-1.296A13.997 13.997 0 1016.004 2.003zm0 2c6.627 0 12 5.373 12 12a11.93 11.93 0 01-2.141 6.782l.699 2.553-2.618-.688A11.963 11.963 0 0116.004 4.003zm-5.373 7.084c-.235.526-.353 1.105-.353 1.724 0 3.626 2.95 6.574 6.574 6.574.62 0 1.2-.118 1.727-.353l1.588.421a1 1 0 001.21-1.21l-.421-1.588a4.94 4.94 0 00.353-1.727c0-3.624-2.948-6.574-6.574-6.574a4.944 4.944 0 00-1.727.353l-1.588-.421a1 1 0 00-1.21 1.21l.421 1.588z"/>
+      </svg>
+      WhatsApp
+    </button>
 
-<label>Link de la Reunión</label>
-<input type="url" id="link" required />
-<small>Recordá pegar el enlace de tu reunión.</small>
+    <button class="icon-button telegram-button" id="telegramShare">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+        <path d="M120 0C53.72 0 0 53.72 0 120c0 66.28 53.72 120 120 120 66.28 0 120-53.72 120-120C240 53.72 186.28 0 120 0zm55.88 84.71l-18.84 88.78c-1.42 6.26-5.13 7.82-10.4 4.87l-28.74-21.2-13.88 13.36c-1.54 1.54-2.84 2.84-5.83 2.84l2.1-29.78 54.18-48.97c2.35-2.1-.51-3.28-3.63-1.18l-66.94 42.1-28.84-9.01c-6.26-1.97-6.4-6.26 1.32-9.27l112.94-43.62c5.26-1.97 9.85 1.18 8.16 9.11z"/>
+      </svg>
+      Telegram
+    </button>
+  </div>
 
-<label>Saludo de Despedida</label>
-<select id="saludo" required>
+  <textarea id="messagePreview" readonly></textarea>
 
-  <option value="">Seleccioná un saludo...</option>
-  <option>¡Nos vemos en la reunión!</option>
-  <option>Gracias por tu tiempo y energía 🙌</option>
-  <option>Será un gusto compartir con vos 😊</option>
-  <option>No faltes, te esperamos con entusiasmo 🎉</option>
-  <option>¡Te esperamos en la sala!</option>
-  <option>Hasta pronto y gracias por sumarte</option>
-  <option>¡Va a estar buenísima, no te la pierdas!</option>
-  <option>Conectate puntual, va a ser genial 😉</option>
-  <option>¡Gracias por tu interés, nos vemos!</option>
-  <option>Un placer contar con tu presencia 💬</option>
-</select><label>Fecha de la Reunión</label>
-<input type="date" id="fecha" required />
+  <script>
+    const whatsappBtn = document.getElementById("whatsappShare");
+    const telegramBtn = document.getElementById("telegramShare");
+    const preview = document.getElementById("messagePreview");
 
-<label>Hora de la Reunión</label>
-<input type="time" id="hora" required />
-<small>Asegurate de que la hora de tu dispositivo esté correctamente configurada.</small>
-
-<label>Seleccioná los países participantes</label>
-<small id="ayuda-seleccion"></small>
-<select id="paises" multiple size="12" required></select>
-
-<button type="button" onclick="generarMensaje()">Generar y Compartir</button>
-
-  </form>  <div id="preview"></div>  <div class="share-buttons">
-    <button onclick="copiarMensaje()">📋 Copiar</button>
-    <button onclick="compartirWhatsApp()">🟢 WhatsApp</button>
-    <button onclick="compartirTelegram()">🔵 Telegram</button>
-  </div>  <div id="google_translate_element"></div>  <script>
-    const regiones = {"Latinoamérica":[["Argentina","🇦🇷","America/Argentina/Buenos_Aires"],["Brasil","🇧🇷","America/Sao_Paulo"],["México","🇲🇽","America/Mexico_City"],["Colombia","🇨🇴","America/Bogota"],["Chile","🇨🇱","America/Santiago"],["Perú","🇵🇪","America/Lima"],["Uruguay","🇺🇾","America/Montevideo"],["Paraguay","🇵🇾","America/Asuncion"],["Bolivia","🇧🇴","America/La_Paz"],["Ecuador","🇪🇨","America/Guayaquil"],["Venezuela","🇻🇪","America/Caracas"],["Cuba","🇨🇺","America/Havana"],["República Dominicana","🇩🇴","America/Santo_Domingo"],["Guatemala","🇬🇹","America/Guatemala"],["Honduras","🇭🇳","America/Tegucigalpa"],["El Salvador","🇸🇻","America/El_Salvador"],["Nicaragua","🇳🇮","America/Managua"],["Costa Rica","🇨🇷","America/Costa_Rica"],["Panamá","🇵🇦","America/Panama"]],"América del Norte":[["Estados Unidos (EST)","🇺🇸","America/New_York"],["Estados Unidos (CST)","🇺🇸","America/Chicago"],["Estados Unidos (MST)","🇺🇸","America/Denver"],["Estados Unidos (PST)","🇺🇸","America/Los_Angeles"],["Canadá (Toronto)","🇨🇦","America/Toronto"],["Canadá (Vancouver)","🇨🇦","America/Vancouver"],["Canadá (Montreal)","🇨🇦","America/Montreal"]],"Europa":[["España","🇪🇸","Europe/Madrid"],["Francia","🇫🇷","Europe/Paris"],["Alemania","🇩🇪","Europe/Berlin"],["Italia","🇮🇹","Europe/Rome"],["Reino Unido","🇬🇧","Europe/London"],["Países Bajos","🇳🇱","Europe/Amsterdam"],["Portugal","🇵🇹","Europe/Lisbon"],["Suecia","🇸🇪","Europe/Stockholm"],["Noruega","🇳🇴","Europe/Oslo"],["Grecia","🇬🇷","Europe/Athens"],["Suiza","🇨🇭","Europe/Zurich"],["Austria","🇦🇹","Europe/Vienna"],["Irlanda","🇮🇪","Europe/Dublin"],["Polonia","🇵🇱","Europe/Warsaw"],["Ucrania","🇺🇦","Europe/Kyiv"]],"África":[["Sudáfrica","🇿🇦","Africa/Johannesburg"],["Egipto","🇪🇬","Africa/Cairo"],["Nigeria","🇳🇬","Africa/Lagos"],["Kenia","🇰🇪","Africa/Nairobi"],["Marruecos","🇲🇦","Africa/Casablanca"],["Argelia","🇩🇿","Africa/Algiers"],["Ghana","🇬🇭","Africa/Accra"],["Túnez","🇹🇳","Africa/Tunis"],["Etiopía","🇪🇹","Africa/Addis_Ababa"]],"Asia":[["China","🇨🇳","Asia/Shanghai"],["India","🇮🇳","Asia/Kolkata"],["Japón","🇯🇵","Asia/Tokyo"],["Corea del Sur","🇰🇷","Asia/Seoul"],["Tailandia","🇹🇭","Asia/Bangkok"],["Indonesia","🇮🇩","Asia/Jakarta"],["Filipinas","🇵🇭","Asia/Manila"],["Malasia","🇲🇾","Asia/Kuala_Lumpur"],["Vietnam","🇻🇳","Asia/Ho_Chi_Minh"],["Emiratos Árabes","🇦🇪","Asia/Dubai"],["Arabia Saudita","🇸🇦","Asia/Riyadh"],["Israel","🇮🇱","Asia/Jerusalem"]],"Oceanía":[["Australia (Sydney)","🇦🇺","Australia/Sydney"],["Australia (Perth)","🇦🇺","Australia/Perth"],["Nueva Zelanda","🇳🇿","Pacific/Auckland"],["Fiyi","🇫🇯","Pacific/Fiji"],["Papúa Nueva Guinea","🇵🇬","Pacific/Port_Moresby"]]};
-    const esMovil = /Mobi|Android/i.test(navigator.userAgent);
-    const selector = document.getElementById("paises");
-    if (esMovil) selector.size = 15;
-
-    Object.entries(regiones).forEach(([region, paises]) => {
-      const group = document.createElement("optgroup");
-      group.label = region;
-      paises.forEach(([nombre, bandera, zona]) => {
-        const opt = document.createElement("option");
-        opt.value = `${nombre}|${bandera}|${zona}|${region}`;
-        opt.textContent = `${bandera} ${nombre}`;
-        group.appendChild(opt);
-      });
-      selector.appendChild(group);
+    whatsappBtn.addEventListener("click", () => {
+      const text = encodeURIComponent(preview.value);
+      const url = `https://wa.me/?text=${text}`;
+      window.open(url, "_blank");
     });
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const ayuda = document.getElementById("ayuda-seleccion");
-      ayuda.textContent = esMovil
-        ? "Tocá varias veces para seleccionar varios países."
-        : "Podés elegir varios. En PC: Ctrl + clic.";
+    telegramBtn.addEventListener("click", () => {
+      const text = encodeURIComponent(preview.value);
+      const url = `https://t.me/share/url?url=&text=${text}`;
+      window.open(url, "_blank");
     });
-
-    function generarMensaje() {
-      const DateTime = luxon.DateTime;
-      const nombre = document.getElementById("nombre").value;
-      const titulo = document.getElementById("titulo").value.toUpperCase();
-      const comentarios = document.getElementById("comentarios").value;
-      const saludo = document.getElementById("saludo").value;
-      const link = document.getElementById("link").value;
-      const fecha = document.getElementById("fecha").value;
-      const hora = document.getElementById("hora").value;
-
-      const seleccion = Array.from(document.getElementById("paises").selectedOptions)
-        .map(opt => opt.value.split("|"));
-
-      const dtOriginal = DateTime.fromISO(`${fecha}T${hora}`, { zone: 'local' });
-      const fechaFormateada = DateTime.fromISO(fecha).toFormat('dd/LL/yyyy');
-
-      let porRegion = {};
-      seleccion.forEach(([nombre, bandera, zona, region]) => {
-        if (!porRegion[region]) porRegion[region] = [];
-        const local = dtOriginal.setZone(zona);
-        porRegion[region].push(`${bandera} ${nombre} ⏰ ${local.toFormat("HH:mm")} (${local.toFormat("hh:mm a")})`);
-      });
-
-      let horarios = "🕒 Horarios Internacionales:\n\n";
-      Object.entries(porRegion).forEach(([region, paises]) => {
-        horarios += `🌍 ${region}\n`;
-        paises.forEach(p => horarios += p + "\n");
-        horarios += "\n";
-      });
-
-      const mensaje = `📌 *${titulo}*\n👤 Organiza: ${nombre}\n📝 ${comentarios}\n📅 Fecha: ${fechaFormateada}\n🕐 Hora: ${hora} (hora local)\n🔗 Enlace: ${link}\n\n${horarios}💬 ${saludo}`;
-      const preview = document.getElementById("preview");
-      preview.innerText = mensaje;
-      preview.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function copiarMensaje() {
-      navigator.clipboard.writeText(document.getElementById("preview").innerText)
-        .then(() => alert("Mensaje copiado al portapapeles."));
-    }
-    function compartirWhatsApp() {
-      const texto = encodeURIComponent(document.getElementById("preview").innerText);
-      window.open(`https://wa.me/?text=${texto}`, '_blank');
-    }
-    function compartirTelegram() {
-      const texto = encodeURIComponent(document.getElementById("preview").innerText);
-      window.open(`https://t.me/share/url?text=${texto}`, '_blank');
-    }
-  </script>  <script type="text/javascript">
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'es',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-      }, 'google_translate_element');
-    }
-  </script>  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script></body>
+  </script>
+</body>
 </html>

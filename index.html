@@ -3,160 +3,208 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coordinador de Reuniones</title>
+  <title>Coordinador de Reuniones Multizona</title>
   <style>
     :root {
-      --primary-bg: #ffffff;
-      --primary-text: #000000;
-      --secondary-bg: #f3f3f3;
-      --card-bg: #ffffff;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --primary-bg: #121212;
-        --primary-text: #ffffff;
-        --secondary-bg: #1e1e1e;
-        --card-bg: #2c2c2c;
-      }
+      color-scheme: light dark;
     }
 
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background-color: var(--primary-bg);
-      color: var(--primary-text);
-      padding: 1em;
+      background-color: #f9f9f9;
+      color: #222;
+      padding: 20px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #121212;
+        color: #f9f9f9;
+      }
+
+      textarea, input, select {
+        background-color: #1e1e1e;
+        color: #f9f9f9;
+        border: 1px solid #444;
+      }
+
+      button {
+        background-color: #333;
+        color: white;
+      }
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 0.5em;
     }
 
-    .container {
-      max-width: 700px;
-      margin: auto;
-      background-color: var(--card-bg);
-      padding: 1.5em;
-      border-radius: 12px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
     }
 
-    textarea {
+    input, select, textarea {
       width: 100%;
-      height: 200px;
-      padding: 1em;
-      border-radius: 8px;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
       border: 1px solid #ccc;
-      resize: vertical;
-      background-color: var(--secondary-bg);
-      color: var(--primary-text);
+      box-sizing: border-box;
     }
 
-    .button-group {
-      margin-top: 1em;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
+    select[multiple] {
+      height: 200px;
     }
 
-    button, .share-btn {
-      padding: 0.8em 1.2em;
-      font-size: 1em;
+    button {
+      margin-top: 15px;
+      padding: 10px;
       border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    button.copy-btn {
+      border-radius: 5px;
       background-color: #007bff;
       color: white;
+      font-size: 1em;
+      cursor: pointer;
     }
 
-    .share-btn {
-      background-color: #f0f0f0;
-      color: #333;
-      text-decoration: none;
-    }
-
-    .share-btn:hover,
     button:hover {
-      opacity: 0.9;
+      background-color: #0056b3;
     }
 
-    .whatsapp-icon {
-      width: 20px;
-      height: 20px;
-      fill: #25d366;
+    #output {
+      white-space: pre-wrap;
+      background-color: #eee;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 20px;
     }
 
-    .telegram-icon {
-      width: 20px;
-      height: 20px;
-      fill: #0088cc;
+    .region-optgroup {
+      font-weight: bold;
     }
 
-    @media (max-width: 600px) {
-      .button-group {
-        flex-direction: column;
-        align-items: stretch;
-      }
+    .share-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .license {
+      margin-top: 30px;
+      font-size: 0.9em;
+      text-align: center;
+    }
+
+    .license a {
+      color: inherit;
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Mensaje Generado</h1>
-    <textarea id="generatedMessage" readonly>🏢 EMPRESA EJEMPLO
-📌 REUNIÓN DE EQUIPO
-Nos reuniremos para revisar el progreso del proyecto.
+  <h1 id="title">Coordinador de Reuniones Multizona</h1>
 
-🗓️ Fecha: 20 de junio
-🕒 Hora del anfitrión: 2:00 PM
+  <label for="company" id="companyLabel">Empresa</label>
+  <input type="text" id="company" placeholder="Nombre de la empresa" />
 
-🌎 LATINOAMÉRICA:
-🇦🇷 Argentina: 2:00 PM
-🇲🇽 México: 12:00 PM
+  <label for="meetingTitle" id="meetingTitleLabel">Título de la reunión</label>
+  <input type="text" id="meetingTitle" placeholder="Ej: Reunión Estratégica" oninput="toUpperBold()" />
 
-📍 Enlace de reunión: https://meet.example.com
+  <label for="description" id="descriptionLabel">Descripción</label>
+  <input type="text" id="description" placeholder="Descripción breve de la reunión" />
 
-¡Los esperamos!</textarea>
+  <label for="hostDateTime" id="hostDateTimeLabel">Fecha y hora del anfitrión</label>
+  <input type="datetime-local" id="hostDateTime" />
 
-    <div class="button-group">
-      <button class="copy-btn" onclick="copyMessage()">📋 Copiar</button>
-      <a class="share-btn" id="whatsappShare" target="_blank">
-        <svg class="whatsapp-icon" viewBox="0 0 32 32">
-          <path d="M16 .6C7.6.6.6 7.6.6 16c0 2.8.8 5.4 2.2 7.7L0 32l8.5-2.2C11 31 13.4 31.4 16 31.4c8.4 0 15.4-7 15.4-15.4S24.4.6 16 .6zm0 28c-2.3 0-4.6-.6-6.6-1.8l-.5-.3-5 1.3 1.3-4.8-.3-.5c-1.1-2-1.7-4.2-1.7-6.4 0-7.4 6-13.4 13.4-13.4s13.4 6 13.4 13.4S23.4 28.6 16 28.6zm7.8-10.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2s-.8 1-1 1.2c-.2.2-.4.3-.8.1s-1.5-.6-2.8-1.9c-1-1-1.6-2.2-1.8-2.6-.2-.4 0-.6.2-.8s.4-.5.6-.8c.2-.3.2-.5.3-.7.1-.2 0-.5-.1-.7s-.7-1.6-.9-2.2c-.2-.5-.5-.4-.7-.4s-.4 0-.7 0-.6.1-.9.4c-.3.3-1.1 1.1-1.1 2.6s1.1 3 1.3 3.2c.2.3 2.1 3.3 5 4.6.7.3 1.2.5 1.6.6.7.2 1.3.1 1.8.1.6-.1 1.8-.8 2.1-1.5s.3-1.4.2-1.5c-.1-.1-.3-.2-.6-.3z"/>
-        </svg>
-        Compartir por WhatsApp
-      </a>
-      <a class="share-btn" id="telegramShare" target="_blank">
-        <svg class="telegram-icon" viewBox="0 0 32 32">
-          <path d="M29.9 3.3L2.4 14.3c-1.1.5-1.1 1.3-.2 1.6l6.9 2.1 2.6 8c.3.9.5 1.2 1.4 1.2.9 0 1.2-.4 1.6-.9l3.8-4.6 7.9 5.8c1.5.8 2.6.4 3-1.3L32 5.3c.3-1.5-.6-2.2-2.1-2z"/>
-        </svg>
-        Compartir por Telegram
-      </a>
-    </div>
+  <label for="hostCountry" id="hostCountryLabel">País del anfitrión</label>
+  <select id="hostCountry"></select>
+
+  <label for="link" id="linkLabel">Enlace a la videollamada</label>
+  <input type="url" id="link" placeholder="https://..." />
+
+  <label for="countries" id="countriesLabel">Selecciona los países</label>
+  <input type="text" id="searchCountry" placeholder="Buscar país..." oninput="filterCountries()" />
+  <select id="countries" multiple></select>
+
+  <label for="farewell" id="farewellLabel">Mensaje de despedida</label>
+  <input type="text" id="farewell" placeholder="¡Los esperamos!" />
+
+  <button onclick="generateMessage()" id="generateButton">Generar Mensaje</button>
+
+  <div id="output"></div>
+
+  <div class="share-buttons">
+    <button onclick="copyToClipboard()">📋 Copiar</button>
+    <button onclick="share('whatsapp')">📱 WhatsApp</button>
+    <button onclick="share('telegram')">✈️ Telegram</button>
+    <button onclick="share('discord')">💬 Discord</button>
+  </div>
+
+  <div class="license">
+    © 2025 - Herramienta desarrollada por el autor bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" target="_blank">Licencia Creative Commons Atribución 4.0 Internacional (CC BY 4.0)</a>.
   </div>
 
   <script>
-    function copyMessage() {
-      const message = document.getElementById("generatedMessage").value;
-      navigator.clipboard.writeText(message).then(() => {
-        alert("Mensaje copiado al portapapeles");
-      });
-    }
+    const countries = {
+      "Latinoamérica": [
+        { name: "Argentina", tz: "America/Argentina/Buenos_Aires", emoji: "🇦🇷" },
+        { name: "Bolivia", tz: "America/La_Paz", emoji: "🇧🇴" },
+        { name: "Brasil", tz: "America/Sao_Paulo", emoji: "🇧🇷" },
+        { name: "Chile", tz: "America/Santiago", emoji: "🇨🇱" },
+        { name: "Colombia", tz: "America/Bogota", emoji: "🇨🇴" },
+        { name: "Costa Rica", tz: "America/Costa_Rica", emoji: "🇨🇷" },
+        { name: "Cuba", tz: "America/Havana", emoji: "🇨🇺" },
+        { name: "Ecuador", tz: "America/Guayaquil", emoji: "🇪🇨" },
+        { name: "El Salvador", tz: "America/El_Salvador", emoji: "🇸🇻" },
+        { name: "Guatemala", tz: "America/Guatemala", emoji: "🇬🇹" },
+        { name: "Honduras", tz: "America/Tegucigalpa", emoji: "🇭🇳" },
+        { name: "México", tz: "America/Mexico_City", emoji: "🇲🇽" },
+        { name: "Nicaragua", tz: "America/Managua", emoji: "🇳🇮" },
+        { name: "Panamá", tz: "America/Panama", emoji: "🇵🇦" },
+        { name: "Paraguay", tz: "America/Asuncion", emoji: "🇵🇾" },
+        { name: "Perú", tz: "America/Lima", emoji: "🇵🇪" },
+        { name: "República Dominicana", tz: "America/Santo_Domingo", emoji: "🇩🇴" },
+        { name: "Uruguay", tz: "America/Montevideo", emoji: "🇺🇾" },
+        { name: "Venezuela", tz: "America/Caracas", emoji: "🇻🇪" }
+      ],
+      "Norteamérica": [
+        { name: "Canadá", tz: "America/Toronto", emoji: "🇨🇦" },
+        { name: "Estados Unidos", tz: "America/New_York", emoji: "🇺🇸" }
+      ],
+      "Europa": [
+        { name: "Alemania", tz: "Europe/Berlin", emoji: "🇩🇪" },
+        { name: "España", tz: "Europe/Madrid", emoji: "🇪🇸" },
+        { name: "Francia", tz: "Europe/Paris", emoji: "🇫🇷" },
+        { name: "Italia", tz: "Europe/Rome", emoji: "🇮🇹" },
+        { name: "Países Bajos", tz: "Europe/Amsterdam", emoji: "🇳🇱" },
+        { name: "Portugal", tz: "Europe/Lisbon", emoji: "🇵🇹" },
+        { name: "Reino Unido", tz: "Europe/London", emoji: "🇬🇧" },
+        { name: "Suiza", tz: "Europe/Zurich", emoji: "🇨🇭" }
+      ],
+      "Asia": [
+        { name: "China", tz: "Asia/Shanghai", emoji: "🇨🇳" },
+        { name: "India", tz: "Asia/Kolkata", emoji: "🇮🇳" },
+        { name: "Japón", tz: "Asia/Tokyo", emoji: "🇯🇵" },
+        { name: "Corea del Sur", tz: "Asia/Seoul", emoji: "🇰🇷" },
+        { name: "Filipinas", tz: "Asia/Manila", emoji: "🇵🇭" },
+        { name: "Tailandia", tz: "Asia/Bangkok", emoji: "🇹🇭" }
+      ],
+      "Oceanía": [
+        { name: "Australia", tz: "Australia/Sydney", emoji: "🇦🇺" },
+        { name: "Nueva Zelanda", tz: "Pacific/Auckland", emoji: "🇳🇿" }
+      ],
+      "África": [
+        { name: "Egipto", tz: "Africa/Cairo", emoji: "🇪🇬" },
+        { name: "Kenia", tz: "Africa/Nairobi", emoji: "🇰🇪" },
+        { name: "Marruecos", tz: "Africa/Casablanca", emoji: "🇲🇦" },
+        { name: "Nigeria", tz: "Africa/Lagos", emoji: "🇳🇬" },
+        { name: "Sudáfrica", tz: "Africa/Johannesburg", emoji: "🇿🇦" }
+      ]
+    };
 
-    // Compartir por WhatsApp y Telegram
-    const message = encodeURIComponent(document.getElementById("generatedMessage").value);
-    document.getElementById("whatsappShare").href = `https://wa.me/?text=${message}`;
-    document.getElementById("telegramShare").href = `https://t.me/share/url?text=${message}`;
+    // Aquí continúa el script (para no cortarlo, dime si quieres que siga la parte JS completa ahora)
   </script>
 </body>
 </html>

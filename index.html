@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coordinador de Reuniones Multizona</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #222;
+      padding: 20px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #121212;
+        color: #f9f9f9;
+      }
+
+      textarea, input, select {
+        background-color: #1e1e1e;
+        color: #f9f9f9;
+        border: 1px solid #444;
+      }
+
+      button {
+        background-color: #333;
+        color: white;
+      }
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    select[multiple] {
+      height: 200px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #output {
+      white-space: pre-wrap;
+      background-color: #eee;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+
+    .region-optgroup {
+      font-weight: bold;
+    }
+
+    .share-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .license {
+      margin-top: 30px;
+      font-size: 0.9em;
+      text-align: center;
+    }
+
+    .license a {
+      color: inherit;
+      text-decoration: underline;
+    }
+  
+#meetingTitle {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+</style>
+</head>
+<body>
+  <h1 id="title">Coordinador de Reuniones Multizona</h1>
+
+  <label for="company" id="companyLabel">Empresa</label>
+  <input type="text" id="company" placeholder="Nombre de la empresa" />
+
+  <label for="meetingTitle" id="meetingTitleLabel">Título de la reunión</label>
+  <input type="text" id="meetingTitle" placeholder="Ej: Reunión Estratégica" oninput="toUpperBold()" />
+
+  <label for="description" id="descriptionLabel">Descripción</label>
+  <input type="text" id="description" placeholder="Descripción breve de la reunión" />
+
+  <label for="hostDateTime" id="hostDateTimeLabel">Fecha y hora del anfitrión</label>
+  <input type="datetime-local" id="hostDateTime" />
+
+  <label for="hostCountry" id="hostCountryLabel">País del anfitrión</label>
+  <select id="hostCountry"></select>
+
+  <label for="link" id="linkLabel">Enlace a la videollamada</label>
+  <input type="url" id="link" placeholder="https://..." />
+
+  <label for="countries" id="countriesLabel">Selecciona los países</label>
+  <input type="text" id="searchCountry" placeholder="Buscar país..." oninput="filterCountries()" />
+  <select id="countries" multiple></select>
+
+  
+  <label for="presetGreetings">Seleccionar un saludo</label>
+  <select id="presetGreetings" onchange="applyGreeting()">
+    <option value="">— Elegir saludo —</option>
+    <option value="¡Saludos cordiales! 👋">¡Saludos cordiales! 👋</option>
+    <option value="Nos vemos pronto 😊">Nos vemos pronto 😊</option>
+    <option value="Quedamos atentos 👂">Quedamos atentos 👂</option>
+    <option value="Gracias por su tiempo 🙏">Gracias por su tiempo 🙏</option>
+    <option value="Un abrazo 🤗">Un abrazo 🤗</option>
+    <option value="¡Los esperamos con entusiasmo! 🎉">¡Los esperamos con entusiasmo! 🎉</option>
+    <option value="¡No se lo pierdan! 😉">¡No se lo pierdan! 😉</option>
+    <option value="¡No se olviden! 😁">¡No se olviden! 😁</option>
+    <option value="¡Será un gusto verlos! 🤝">¡Será un gusto verlos! 🤝</option>
+    <option value="¡Los esperamos pronto! 🕒">¡Los esperamos pronto! 🕒</option>
+    <option value="¡Conectamos pronto! 🔗">¡Conectamos pronto! 🔗</option>
+    <option value="¡Gracias por sumarse! 💡">¡Gracias por sumarse! 💡</option>
+
+  </select>
+
+  <label for="farewell" id="farewellLabel">Mensaje de despedida</label>
+  <input type="text" id="farewell" placeholder="¡Los esperamos!" />
+
+  <button onclick="generateMessage()" id="generateButton">Generar Mensaje</button>
+
+  <div id="output"></div>
+
+  <div class="share-buttons">
+    <button onclick="copyToClipboard()">📋 Copiar</button>
+    <button onclick="share('whatsapp')">📱 WhatsApp</button>
+    <button onclick="share('telegram')">✈️ Telegram</button>
+    <button onclick="share('discord')">💬 Discord</button>
+  </div>
+
+  <div class="license">
+    © 2025 - Herramienta desarrollada por Maximiliano.C bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" target="_blank">Licencia Creative Commons Atribución 4.0 Internacional (CC BY 4.0)</a>.
+  </div>
+
+  <script>
+    const countries = {
+      "Latinoamérica": [
+        { name: "Argentina", tz: "America/Argentina/Buenos_Aires", emoji: "🇦🇷" },
+        { name: "Bolivia", tz: "America/La_Paz", emoji: "🇧🇴" },
+        { name: "Brasil", tz: "America/Sao_Paulo", emoji: "🇧🇷" },
+        { name: "Chile", tz: "America/Santiago", emoji: "🇨🇱" },
+        { name: "Colombia", tz: "America/Bogota", emoji: "🇨🇴" },
+        { name: "Costa Rica", tz: "America/Costa_Rica", emoji: "🇨🇷" },
+        { name: "Cuba", tz: "America/Havana", emoji: "🇨🇺" },
+        { name: "Ecuador", tz: "America/Guayaquil", emoji: "🇪🇨" },
+        { name: "El Salvador", tz: "America/El_Salvador", emoji: "🇸🇻" },
+        { name: "Guatemala", tz: "America/Guatemala", emoji: "🇬🇹" },
+        { name: "Honduras", tz: "America/Tegucigalpa", emoji: "🇭🇳" },
+        { name: "México", tz: "America/Mexico_City", emoji: "🇲🇽" },
+        { name: "Nicaragua", tz: "America/Managua", emoji: "🇳🇮" },
+        { name: "Panamá", tz: "America/Panama", emoji: "🇵🇦" },
+        { name: "Paraguay", tz: "America/Asuncion", emoji: "🇵🇾" },
+        { name: "Perú", tz: "America/Lima", emoji: "🇵🇪" },
+        { name: "República Dominicana", tz: "America/Santo_Domingo", emoji: "🇩🇴" },
+        { name: "Uruguay", tz: "America/Montevideo", emoji: "🇺🇾" },
+        { name: "Venezuela", tz: "America/Caracas", emoji: "🇻🇪" }
+      ],
+      "Norteamérica": [
+        { name: "Canadá", tz: "America/Toronto", emoji: "🇨🇦" },
+        { name: "Estados Unidos", tz: "America/New_York", emoji: "🇺🇸" }
+      ],
+      "Europa": [
+        { name: "Alemania", tz: "Europe/Berlin", emoji: "🇩🇪" },
+        { name: "España", tz: "Europe/Madrid", emoji: "🇪🇸" },
+        { name: "Francia", tz: "Europe/Paris", emoji: "🇫🇷" },
+        { name: "Italia", tz: "Europe/Rome", emoji: "🇮🇹" },
+        { name: "Países Bajos", tz: "Europe/Amsterdam", emoji: "🇳🇱" },
+        { name: "Portugal", tz: "Europe/Lisbon", emoji: "🇵🇹" },
+        { name: "Reino Unido", tz: "Europe/London", emoji: "🇬🇧" },
+        { name: "Suiza", tz: "Europe/Zurich", emoji: "🇨🇭" }
+      ],
+      "Asia": [
+        { name: "China", tz: "Asia/Shanghai", emoji: "🇨🇳" },
+        { name: "India", tz: "Asia/Kolkata", emoji: "🇮🇳" },
+        { name: "Japón", tz: "Asia/Tokyo", emoji: "🇯🇵" },
+        { name: "Corea del Sur", tz: "Asia/Seoul", emoji: "🇰🇷" },
+        { name: "Filipinas", tz: "Asia/Manila", emoji: "🇵🇭" },
+        { name: "Tailandia", tz: "Asia/Bangkok", emoji: "🇹🇭" }
+      ],
+      "Oceanía": [
+        { name: "Australia", tz: "Australia/Sydney", emoji: "🇦🇺" },
+        { name: "Nueva Zelanda", tz: "Pacific/Auckland", emoji: "🇳🇿" }
+      ],
+      "África": [
+        { name: "Egipto", tz: "Africa/Cairo", emoji: "🇪🇬" },
+        { name: "Kenia", tz: "Africa/Nairobi", emoji: "🇰🇪" },
+        { name: "Marruecos", tz: "Africa/Casablanca", emoji: "🇲🇦" },
+        { name: "Nigeria", tz: "Africa/Lagos", emoji: "🇳🇬" },
+        { name: "Sudáfrica", tz: "Africa/Johannesburg", emoji: "🇿🇦" }
+      ]
+    };
+
+    //<script>
+  // Detección idioma navegador y traducción simple ES/EN
+  const lang = navigator.language.startsWith('en') ? 'en' : 'es';
+
+  const translations = {
+    es: {
+      title: "Coordinador de Reuniones Multizona",
+      companyLabel: "Empresa",
+      meetingTitleLabel: "Título de la reunión",
+      descriptionLabel: "Descripción",
+      hostDateTimeLabel: "Fecha y hora del anfitrión",
+      hostCountryLabel: "País del anfitrión",
+      linkLabel: "Enlace a la videollamada",
+      countriesLabel: "Selecciona los países",
+      searchPlaceholder: "Buscar país...",
+      farewellLabel: "Mensaje de despedida",
+      generateButton: "Generar Mensaje",
+      copyButton: "📋 Copiar",
+      whatsappButton: "📱 WhatsApp",
+      telegramButton: "✈️ Telegram",
+      discordButton: "💬 Discord",
+      placeholderCompany: "Nombre de la empresa",
+      placeholderTitle: "Ej: Reunión Estratégica",
+      placeholderDescription: "Descripción breve de la reunión",
+      placeholderLink: "https://...",
+      placeholderFarewell: "¡Los esperamos!",
+      licenseText: "© 2025 - Herramienta desarrollada por Maximiliano.C bajo Licencia Creative Commons Atribución 4.0 Internacional (CC BY 4.0)."
+    },
+    en: {
+      title: "Multi-timezone Meeting Coordinator",
+      companyLabel: "Company",
+      meetingTitleLabel: "Meeting Title",
+      descriptionLabel: "Description",
+      hostDateTimeLabel: "Host Date and Time",
+      hostCountryLabel: "Host Country",
+      linkLabel: "Video Call Link",
+      countriesLabel: "Select Countries",
+      searchPlaceholder: "Search country...",
+      farewellLabel: "Farewell Message",
+      generateButton: "Generate Message",
+      copyButton: "📋 Copy",
+      whatsappButton: "📱 WhatsApp",
+      telegramButton: "✈️ Telegram",
+      discordButton: "💬 Discord",
+      placeholderCompany: "Company name",
+      placeholderTitle: "Ex: Strategic Meeting",
+      placeholderDescription: "Brief description of the meeting",
+      placeholderLink: "https://...",
+      placeholderFarewell: "Looking forward to seeing you!",
+      licenseText: "© 2025 - Tool developed by the author under Creative Commons Attribution 4.0 International License (CC BY 4.0)."
+    }
+  };
+
+  function translateUI() {
+    const t = translations[lang];
+    document.getElementById('title').textContent = t.title;
+    document.getElementById('companyLabel').textContent = t.companyLabel;
+    document.getElementById('meetingTitleLabel').textContent = t.meetingTitleLabel;
+    document.getElementById('descriptionLabel').textContent = t.descriptionLabel;
+    document.getElementById('hostDateTimeLabel').textContent = t.hostDateTimeLabel;
+    document.getElementById('hostCountryLabel').textContent = t.hostCountryLabel;
+    document.getElementById('linkLabel').textContent = t.linkLabel;
+    document.getElementById('countriesLabel').textContent = t.countriesLabel;
+    document.getElementById('searchCountry').placeholder = t.searchPlaceholder;
+    document.getElementById('farewellLabel').textContent = t.farewellLabel;
+    document.getElementById('generateButton').textContent = t.generateButton;
+
+    const shareButtons = document.querySelectorAll('.share-buttons button');
+    shareButtons[0].textContent = t.copyButton;
+    shareButtons[1].textContent = t.whatsappButton;
+    shareButtons[2].textContent = t.telegramButton;
+    shareButtons[3].textContent = t.discordButton;
+
+    document.getElementById('company').placeholder = t.placeholderCompany;
+    document.getElementById('meetingTitle').placeholder = t.placeholderTitle;
+    document.getElementById('description').placeholder = t.placeholderDescription;
+    document.getElementById('link').placeholder = t.placeholderLink;
+    document.getElementById('farewell').placeholder = t.placeholderFarewell;
+
+    document.querySelector('.license').innerHTML = t.licenseText;
+  }
+
+  // Carga países en los select
+  function loadCountries() {
+    const hostCountrySelect = document.getElementById('hostCountry');
+    const countriesSelect = document.getElementById('countries');
+    hostCountrySelect.innerHTML = '';
+    countriesSelect.innerHTML = '';
+
+    for (const region in countries) {
+      // Host country select - opciones simples
+      const optgroupHost = document.createElement('optgroup');
+      optgroupHost.label = region;
+      countries[region].forEach(country => {
+        const option = document.createElement('option');
+        option.value = country.name;
+        option.textContent = `${country.emoji} ${country.name}`;
+        optgroupHost.appendChild(option);
+      });
+      hostCountrySelect.appendChild(optgroupHost);
+
+      // Countries select multiple con optgroups
+      const optgroup = document.createElement('optgroup');
+      optgroup.label = region;
+      countries[region].forEach(country => {
+        const option = document.createElement('option');
+        option.value = country.name;
+        option.textContent = `${country.emoji} ${country.name}`;
+        optgroup.appendChild(option);
+      });
+      countriesSelect.appendChild(optgroup);
+    }
+
+    // Por defecto, seleccionar el primer país en hostCountry
+    if(hostCountrySelect.options.length > 0) {
+      hostCountrySelect.selectedIndex = 0;
+    }
+  }
+
+  // Filtro para buscador de países
+  function filterCountries() {
+    const filter = document.getElementById('searchCountry').value.toLowerCase();
+    const countriesSelect = document.getElementById('countries');
+    for (let i = 0; i < countriesSelect.options.length; i++) {
+      const option = countriesSelect.options[i];
+      option.style.display = option.textContent.toLowerCase().includes(filter) ? '' : 'none';
+    }
+  }
+
+  // Convierte título a mayúsculas
+  function toUpperBold() {
+    const input = document.getElementById('meetingTitle');
+    input.value = input.value.toUpperCase();
+  }
+
+  // Convierte fecha ISO local a Date en UTC para uso de Intl
+  function parseLocalDateTimeLocal(inputValue) {
+    // inputValue: "YYYY-MM-DDTHH:MM"
+    const [date, time] = inputValue.split('T');
+    if (!date || !time) return null;
+    // Crear objeto Date con zona local
+    const [year, month, day] = date.split('-').map(Number);
+    const [hour, minute] = time.split(':').map(Number);
+    return new Date(year, month - 1, day, hour, minute);
+  }
+
+  // Convierte hora del anfitrión a hora en zona del país en formato 12h AM/PM
+  function convertToTimeZone(date, timeZone) {
+    if (!date) return '—';
+    try {
+      const options = {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+        timeZone: timeZone
+      };
+      return new Intl.DateTimeFormat(lang === 'es' ? 'es-ES' : 'en-US', options).format(date);
+    } catch {
+      return '—';
+    }
+  }
+
+  // Genera mensaje formateado con emojis y regiones agrupadas
+  function generateMessage() {
+    const company = document.getElementById('company').value.trim();
+    const title = document.getElementById('meetingTitle').value.trim().toUpperCase();
+    const description = document.getElementById('description').value.trim();
+    const hostDateTimeInput = document.getElementById('hostDateTime').value;
+    const hostCountry = document.getElementById('hostCountry').value;
+    const link = document.getElementById('link').value.trim();
+    const farewell = document.getElementById('farewell').value.trim() || (lang === 'es' ? '¡Los esperamos!' : 'Looking forward to seeing you!');
+    const selectedCountries = Array.from(document.getElementById('countries').selectedOptions).map(o => o.value);
+
+    if (!title) {
+      alert(lang === 'es' ? 'Por favor ingresa el título de la reunión.' : 'Please enter the meeting title.');
+      return;
+    }
+    if (!hostDateTimeInput) {
+      alert(lang === 'es' ? 'Por favor selecciona fecha y hora del anfitrión.' : 'Please select host date and time.');
+      return;
+    }
+    if (!hostCountry) {
+      alert(lang === 'es' ? 'Por favor selecciona el país del anfitrión.' : 'Please select the host country.');
+      return;
+    }
+    if (selectedCountries.length === 0) {
+      alert(lang === 'es' ? 'Por favor selecciona al menos un país para la reunión.' : 'Please select at least one country for the meeting.');
+      return;
+    }
+
+    const hostDate = parseLocalDateTimeLocal(hostDateTimeInput);
+    if (!hostDate) {
+      alert(lang === 'es' ? 'Fecha y hora inválidas.' : 'Invalid date and time.');
+      return;
+    }
+
+    // Buscar zona horaria anfitrión
+    let hostTz = null;
+    outerHost:
+    for (const region in countries) {
+      for (const c of countries[region]) {
+        if (c.name === hostCountry) {
+          hostTz = c.tz;
+          break outerHost;
+        }
+      }
+    }
+    if (!hostTz) {
+      alert(lang === 'es' ? 'Zona horaria del país anfitrión no encontrada.' : 'Host country time zone not found.');
+      return;
+    }
+
+    // Fecha y hora en zona anfitrión en formato largo
+    const hostDateString = new Intl.DateTimeFormat(lang === 'es' ? 'es-ES' : 'en-US', {
+      dateStyle: 'full',
+      timeStyle: 'short',
+      timeZone: hostTz,
+      hour12: true
+    }).format(hostDate);
+
+    // Construir mensaje
+    let message = '';
+    if(company) message += `🏢 ${company}\n`;
+    message += `📌 *${title}*\n`;
+    if(description) message += `${description}\n`;
+    message += (lang === 'es' ? '🗓️ Fecha y hora del anfitrión' : '🗓️ Host date and time') + `: ${hostDateString}\n`;
+    message += `${lang === 'es' ? '🌐 País anfitrión' : '🌐 Host country'}: ${hostCountry}\n`;
+    if(link) message += `${lang === 'es' ? '🔗 Enlace a la videollamada' : '🔗 Video call link'}: ${link}\n\n`;
+
+    // Agrupar por región solo los países seleccionados, ordenados alfabéticamente
+    const selectedByRegion = {};
+    for (const region in countries) {
+      const filtered = countries[region].filter(c => selectedCountries.includes(c.name));
+      if (filtered.length > 0) {
+        selectedByRegion[region] = filtered.sort((a, b) => a.name.localeCompare(b.name));
+      }
+    }
+
+    for (const region in selectedByRegion) {
+      message += (lang === 'es' ? '🌍 Región' : '🌍 Region') + `: ${region}\n`;
+      selectedByRegion[region].forEach(c => {
+        const time = convertToTimeZone(hostDate, c.tz);
+        message += `${c.emoji} ${c.name}: ${time}\n`;
+      });
+      message += '\n';
+    }
+
+    message += farewell;
+
+    // Mostrar mensaje con formato markdown (negritas con *)
+    const output = document.getElementById('output');
+    output.textContent = message;
+  }
+
+  // Copiar texto al portapapeles
+  function copyToClipboard() {
+    const output = document.getElementById('output').textContent;
+    if(!output) return alert(lang === 'es' ? 'No hay mensaje para copiar.' : 'No message to copy.');
+    navigator.clipboard.writeText(output).then(() => {
+      alert(lang === 'es' ? 'Mensaje copiado al portapapeles.' : 'Message copied to clipboard.');
+    });
+  }
+
+  // Compartir por plataformas
+  function share(platform) {
+    const output = document.getElementById('output').textContent;
+    if(!output) return alert(lang === 'es' ? 'Genera el mensaje primero.' : 'Generate the message first.');
+
+    let url = '';
+    const encodedMessage = encodeURIComponent(output);
+
+    switch(platform) {
+      case 'whatsapp':
+        url = `https://api.whatsapp.com/send?text=${encodedMessage}`;
+        break;
+      case 'telegram':
+        url = `https://t.me/share/url?url=&text=${encodedMessage}`;
+        break;
+      case 'discord':
+        alert(lang === 'es' ? 'Para compartir en Discord, pega el mensaje directamente en un canal.' : 'To share on Discord, paste the message directly in a channel.');
+        return;
+      default:
+        return;
+    }
+
+    window.open(url, '_blank');
+  }
+
+  
+  function applyGreeting() {
+    const select = document.getElementById('presetGreetings');
+    const farewellInput = document.getElementById('farewell');
+    if (select.value) {
+      farewellInput.value = select.value;
+    }
+  }
+
+
+  // Inicialización al cargar la página
+  window.onload = () => {
+    translateUI();
+    loadCountries();
+  };
+</script>
+  </script>
+</body>
+</html>

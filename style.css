@@ -1,104 +1,174 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title id="appTitle">Coordinador de Reuniones Multizona</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+/* --- 1. CONFIGURACIÓN GLOBAL Y TIPOGRAFÍA --- */
+:root {
+  color-scheme: light dark;
+  --primary-color: #007aff;
+  --primary-hover: #005ecb;
+  --green-color: #34c759;
+  --green-hover: #29a046;
+  --secondary-color: #8e8e93;
+  --secondary-hover: #6d6d71;
+  --bg-light: #f2f2f7;
+  --card-bg-light: #ffffff;
+  --text-light: #1c1c1e;
+  --border-light: #e5e5ea;
+  --bg-dark: #1c1c1e;
+  --card-bg-dark: #2c2c2e;
+  --text-dark: #f2f2f7;
+  --border-dark: #3a3a3c;
+}
 
-  <main class="main-container">
-    <div class="header-container">
-      <h1 id="title">Coordinador de Reuniones Multizona</h1>
-      <div id="lang-switcher">
-        <button id="lang-es">🇪🇸</button>
-        <button id="lang-en">🇺🇸</button>
-      </div>
-    </div>
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-light);
+  padding: 20px;
+  margin: 0 auto;
+  transition: background-color 0.3s, color 0.3s;
+}
 
-    <div class="template-section">
-      <label for="templates" id="templatesLabel">Plantillas</label>
-      <div class="template-controls">
-        <select id="templates"></select>
-        <button id="loadTemplateBtn" title="Cargar plantilla seleccionada">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M4.5 2.5a.5.5 0 0 1 .5.5V5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5V8h-.5a.5.5 0 0 1-.5-.5V7.5h-.5a.5.5 0 0 1-.5-.5V7h-.5a.5.5 0 0 1-.5-.5V6.5h-.5a.5.5 0 0 1-.5-.5V6h-.5a.5.5 0 0 1-.5-.5V5.5h-.5a.5.5 0 0 1-.5-.5V3a.5.5 0 0 1 .5-.5h.5z"/><path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/></svg>
-        </button>
-        <button id="saveTemplateBtn" title="Guardar configuración actual como plantilla">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1-1H7.5a1 1 0 0 0-1 1H2zm3 4a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5z"/><path d="M7.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm-5 0A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5v1A1.5 1.5 0 0 1 9.5 4h-3A1.5 1.5 0 0 1 5 2.5v-1zM6 4.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5zm3 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5z"/></svg>
-        </button>
-      </div>
-    </div>
+/* --- 2. CONTENEDOR PRINCIPAL Y ENCABEZADO --- */
+.main-container {
+  background-color: var(--card-bg-light);
+  max-width: 750px;
+  margin: 20px auto;
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-light);
+}
 
-    <label for="company" id="companyLabel">Empresa</label>
-    <input type="text" id="company" />
+.header-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+h1 { font-size: 1.5em; text-align: left; margin: 0; flex-grow: 1; }
+#lang-switcher button { background: none; border: none; padding: 5px; cursor: pointer; font-size: 1.5em; opacity: 0.7; transition: opacity 0.2s; }
+#lang-switcher button:hover { opacity: 1; }
+#lang-switcher button.active { opacity: 1; transform: scale(1.1); }
 
-    <label for="meetingTitle" id="meetingTitleLabel">Título de la reunión</label>
-    <input type="text" id="meetingTitle" oninput="this.value = this.value.toUpperCase()" />
+/* --- 3. ELEMENTOS DE FORMULARIO --- */
+label { display: block; margin-top: 20px; font-weight: 500; font-size: 0.9em; color: var(--secondary-color); }
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border-light);
+  background-color: var(--bg-light);
+  color: var(--text-light);
+  box-sizing: border-box;
+  font-size: 1em;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
+}
+select[multiple] { height: 200px; padding: 10px; }
 
-    <label for="description" id="descriptionLabel">Descripción</label>
-    <input type="text" id="description" />
+.host-time-controls, .template-controls { display: flex; gap: 10px; align-items: center; margin-top: 8px; }
+.host-time-controls input, .template-controls select { flex-grow: 1; margin-top: 0; }
 
-    <label for="agenda" id="agendaLabel">Agenda (un punto por línea)</label>
-    <textarea id="agenda" rows="4"></textarea>
+/* --- 4. BOTONERA --- */
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 1em;
+  font-weight: 500;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+button:hover { transform: translateY(-1px); }
+button:active { transform: translateY(0); box-shadow: none; }
+button svg { width: 16px; height: 16px; fill: currentColor; }
 
-    <label for="hostDateTime" id="hostDateTimeLabel">Fecha y hora del anfitrión</label>
-    <div class="host-time-controls">
-      <input type="datetime-local" id="hostDateTime" />
-      <button id="suggestTimeBtn" title="Sugerir hora óptima">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13.46 3.46a.5.5 0 0 1 .708 0l1.414 1.414a.5.5 0 0 1 0 .708l-1.414 1.414a.5.5 0 0 1-.708 0L12.05 5.586l1.414-1.414zM12.05 9.97l1.414 1.414a.5.5 0 0 1 0 .708l-1.414 1.414a.5.5 0 0 1-.708 0L9.97 12.05l1.414-1.414zM3.46 13.46a.5.5 0 0 1 0 .708l-1.414 1.414a.5.5 0 0 1-.708 0L.025 14.17a.5.5 0 0 1 0-.708l1.414-1.414a.5.5 0 0 1 .708 0zM5.586 12.05l-1.414 1.414a.5.5 0 0 1-.708 0L2.05 12.05l1.414-1.414a.5.5 0 0 1 .708 0zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zM8 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm-5.5-7.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zM11 8a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/></svg>
-      </button>
-    </div>
+/* Estilos de botones por función */
+#generateButton {
+  width: 100%;
+  margin-top: 25px;
+  padding: 16px;
+  font-size: 1.1em;
+  font-weight: 700;
+  background-color: var(--primary-color);
+}
+#generateButton:hover { background-color: var(--primary-hover); }
 
-    <label for="hostCountry" id="hostCountryLabel">País del anfitrión</label>
-    <select id="hostCountry"></select>
+#suggestTimeBtn, #loadTemplateBtn, #saveTemplateBtn {
+  background-color: var(--secondary-color);
+  padding: 12px;
+  height: 46px; /* Altura consistente */
+  width: 46px; /* Ancho consistente para botones de ícono */
+  margin-top: 0;
+}
+#suggestTimeBtn:hover, #loadTemplateBtn:hover, #saveTemplateBtn:hover { background-color: var(--secondary-hover); }
 
-    <label for="link" id="linkLabel">Enlace a la videollamada</label>
-    <input type="url" id="link" />
+.share-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
+.share-buttons button, #icsButton { flex-grow: 1; margin-top: 0; }
+#copyButton { background-color: var(--secondary-color); flex-grow: 2; }
+#whatsappButton { background-color: #25D366; }
+#telegramButton { background-color: #229ED9; }
+#icsButton { background-color: #34c759; }
 
-    <label for="countries" id="countriesLabel">Selecciona los países participantes</label>
-    <input type="text" id="searchCountry" oninput="filterCountries()" />
-    <select id="countries" multiple></select>
+/* Icon-only buttons */
+#whatsappButton, #telegramButton { flex-grow: 0; width: 46px; height: 46px; padding: 0; gap: 0; }
+#whatsappButton svg, #telegramButton svg { width: 20px; height: 20px; }
 
-    <div id="timezone-visualizer-container">
-      <label id="visualizerLabel">Visualizador de Horarios</label>
-      <div id="timezone-visualizer"></div>
-    </div>
+/* --- 5. COMPONENTES ESPECÍFICOS --- */
+#timezone-visualizer-container { margin-top: 25px; }
+#timezone-visualizer {
+  position: relative;
+  width: 100%;
+  height: 60px;
+  background-color: var(--bg-light);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.tz-marker {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 15px;
+  font-size: 0.8em;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  cursor: default;
+  transition: background-color 0.3s;
+}
+.tz-marker.is-host { border: 2px solid var(--primary-color); }
+.tz-marker.is-day { background-color: var(--green-color); }
+.tz-marker.is-night { background-color: #ff3b30; }
+.tz-marker-time { font-size: 0.9em; display: block; margin-top: 2px;}
 
-    <label for="presetGreetings" id="presetGreetingsLabel">Seleccionar un saludo final</label>
-    <select id="presetGreetings" onchange="applyGreeting()"></select>
+#output {
+  white-space: pre-wrap;
+  background-color: var(--bg-light);
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+  border: 1px solid var(--border-light);
+  min-height: 100px;
+}
+.license { margin-top: 30px; font-size: 0.8em; text-align: center; color: var(--secondary-color); }
+.license a { color: inherit; }
 
-    <label for="farewell" id="farewellLabel">Mensaje de despedida</label>
-    <input type="text" id="farewell" />
-
-    <button onclick="generateMessage()" id="generateButton">Generar Mensaje</button>
-
-    <div id="output"></div>
-
-    <div class="share-buttons">
-      <button onclick="copyToClipboard()" id="copyButton" title="Copiar mensaje">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13,0H6A2,2,0,0,0,4,2V14a2,2,0,0,0,2,2H13a2,2,0,0,0,2-2V2A2,2,0,0,0,13,0ZM13,14H6V2H13Z"/><path d="M3,3H1A1,1,0,0,0,0,4V15a1,1,0,0,0,1,1H10a1,1,0,0,0,1-1V14H3Z"/></svg>
-        COPY
-      </button>
-      <button onclick="share('whatsapp')" id="whatsappButton" aria-label="Compartir en WhatsApp" title="Compartir en WhatsApp">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>
-      </button>
-      <button onclick="share('telegram')" id="telegramButton" aria-label="Compartir en Telegram" title="Compartir en Telegram">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.287 5.906c-.778.324-2.334.994-4.666 2.01-.378.15-.577.298-.595.442-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294.26.006.549-.1.868-.32C7.654 8.59 11.01 6.55 11.422 6.22c.413-.33.614-.39.804-.405.25-.02.487.03.663.22.19.205.228.522.228.593 0 .041-.01.09-.034.143-.161.411-2.94 2.85-4.12 3.96-.333.36-.626.65-.926.85-.314.2-.67.33-.997.33-.35 0-.65-.11-.87-.33-.224-.22-.27-.51-.27-.62 0-.065.016-.13.046-.197.04-.085.16-.29.33-.515.15-.19.34-.41.56-.63.26-.26.5-.5.71-.71.25-.25.47-.47.65-.65zm-2.165 4.145c.16-.16.29-.3.41-.44.12-.14.23-.28.32-.42.09-.14.15-.28.19-.41.04-.13.06-.25.06-.36 0-.2-.08-.37-.23-.51-.14-.14-.33-.2-.55-.2-.17 0-.33.03-.46.1.02.04.03.07.04.1.01.03.02.06.02.09 0 .05-.01.1-.03.15-.02.05-.04.1-.07.15-.03.05-.06.1-.09.15-.03.05-.06.1-.1.15-.03.05-.07.09-.1.14-.04.05-.07.1-.11.14-.04.05-.08.09-.11.13-.04.04-.08.09-.12.13-.04.04-.08.08-.12.12-.04.04-.08.08-.12.12l-.09.09c-.08.08-.15.15-.22.22-.07.07-.13.13-.2.2-.07.07-.13.13-.19.19-.06.06-.12.12-.18.18s-.11.11-.17.17c-.06.06-.11.11-.17.17l-.11.11-.1.1c-.05.05-.09.09-.14.14-.05.05-.09.09-.14.14-.05.05-.09.09-.14.14l-.06.06c-.05.05-.1.1-.15.15-.05.05-.1.1-.15.15z"/></svg>
-      </button>
-    </div>
-
-    <div class="license">
-      <p id="licenseText">
-        © 2025 - Herramienta desarrollada por Maximiliano.C bajo 
-        <a href="https://creativecommons.org/licenses/by/4.0/deed.es" target="_blank" id="licenseLink">Licencia CC BY 4.0</a>.
-      </p>
-    </div>
-  </main>
-
-  <script src="script.js"></script>
-</body>
-</html>
+/* --- 6. MODO OSCURO --- */
+@media (prefers-color-scheme: dark) {
+  body { background-color: var(--bg-dark); color: var(--text-dark); }
+  .main-container { background-color: var(--card-bg-dark); border-color: var(--border-dark); }
+  input, select, textarea { background-color: var(--bg-dark); border-color: var(--border-dark); color: var(--text-dark); }
+  input:focus, select:focus, textarea:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.3); }
+  #timezone-visualizer { background-color: var(--bg-dark); }
+  #output { background-color: var(--bg-dark); border-color: var(--border-dark); }
+  .tz-marker.is-day { background-color: var(--green-hover); }
+}

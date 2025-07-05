@@ -1,5 +1,4 @@
 // --- DATABASE & TRANSLATIONS ---
-
 const countries = {
   "Latinoamérica": [
     { name: "Argentina", tz: "America/Argentina/Buenos_Aires", emoji: "🇦🇷" },
@@ -210,9 +209,7 @@ function setLanguage(lang) {
   if (!translations[lang]) lang = 'en';
   currentLang = lang;
   localStorage.setItem('preferredLang', lang);
-  
   const t = translations[lang];
-  
   const textElements = {
     'appTitle': 'appTitle', 'title': 'title', 'templatesLabel': 'templatesLabel',
     'loadTemplateBtn': 'loadTemplateBtn', 'saveTemplateBtn': 'saveTemplateBtn',
@@ -226,29 +223,23 @@ function setLanguage(lang) {
     'whatsappButton': 'whatsappButton', 'telegramButton': 'telegramButton',
     'licenseLink': 'licenseLink'
   };
-
   for (const id in textElements) {
     document.getElementById(id).textContent = t[textElements[id]];
   }
-
   const placeholderElements = {
     'company': 'placeholderCompany', 'meetingTitle': 'placeholderTitle',
     'description': 'placeholderDescription', 'link': 'placeholderLink',
     'searchCountry': 'searchPlaceholder', 'farewell': 'placeholderFarewell'
   };
-
   for (const id in placeholderElements) {
     document.getElementById(id).placeholder = t[placeholderElements[id]];
   }
-
   document.documentElement.lang = lang;
   document.getElementById('licenseText').firstChild.nodeValue = t.licenseText + ' ';
   const icsButton = document.getElementById('icsButton');
   if(icsButton) icsButton.textContent = t.icsButton;
-
   document.getElementById('lang-es').classList.toggle('active', lang === 'es');
   document.getElementById('lang-en').classList.toggle('active', lang === 'en');
-
   loadCountries();
   loadGreetings();
 }
@@ -329,12 +320,10 @@ function drawTimezoneVisualizer() {
         marker.innerHTML = `${countryData.emoji}<span class="tz-marker-time">${localHourFormatted}</span>`;
         if (name === hostCountryName) marker.classList.add('is-host');
         const localHour24 = localTime.getHours();
-        if (localHour24 >= 12 && localHour24 < 14) {
-            marker.classList.add('is-lunch');
-        } else if (localHour24 >= 8 && localHour24 < 18) {
-            marker.classList.add('is-work');
+        if (localHour24 >= 7 && localHour24 < 22) {
+            marker.classList.add('is-day');
         } else {
-            marker.classList.add('is-off-hours');
+            marker.classList.add('is-night');
         }
         visualizer.appendChild(marker);
     });
@@ -350,38 +339,49 @@ function suggestOptimalTime() {
     const allNames = [...new Set([hostCountryName, ...selectedCountryNames])].filter(Boolean);
     const countryObjects = allNames.map(name => Object.values(countries).flat().find(c => c.name === name)).filter(Boolean);
     if (countryObjects.length === 0) return;
+    
     let bestSlots = [];
-    const targetDate = new Date();
-    targetDate.setDate(targetDate.getDate() + 1);
+    
     for (let h = 0; h < 24; h++) {
-        targetDate.setHours(h, 0, 0, 0);
+        // CORRECCIÓN: Crear una fecha base limpia para cada iteración
+        const baseDate = new Date();
+        baseDate.setDate(baseDate.getDate() + 1);
+        baseDate.setHours(h, 0, 0, 0);
+
         let score = 0;
         countryObjects.forEach(country => {
-            const localTime = new Date(targetDate.toLocaleString('en-US', { timeZone: country.tz }));
+            const localTime = new Date(baseDate.toLocaleString('en-US', { timeZone: country.tz }));
             const localHour = localTime.getHours();
-            if (localHour >= 12 && localHour < 14) { score -= 2; } 
-            else if (localHour >= 9 && localHour < 18) { score += 2; } 
-            else if (localHour >= 8 && localHour < 19) { score += 1; } 
-            else { score -= 1; }
+            
+            // Lógica Universal: Puntúa más alto si todos están en horario diurno.
+            if (localHour >= 7 && localHour < 23) {
+                score++;
+            }
         });
         bestSlots.push({ hour: h, score: score });
     }
+
     bestSlots.sort((a, b) => b.score - a.score);
     const topScore = bestSlots[0].score;
     const topSlots = bestSlots.filter(slot => slot.score === topScore);
     const suggestion = topSlots.map(slot => `${slot.hour.toString().padStart(2, '0')}:00`).join(', ');
+    
     const userChoice = prompt(
-        `${currentLang === 'es' ? 'Horarios sugeridos (evitando almuerzo)' : 'Suggested times (avoiding lunch)'}: ${suggestion}\n\n` +
+        `${currentLang === 'es' ? 'Horarios sugeridos (más personas despiertas)' : 'Suggested times (most people awake)'}: ${suggestion}\n\n` +
         `${currentLang === 'es' ? 'Elige una hora y escríbela (ej: 9, 14, 21):' : 'Choose an hour and type it (e.g., 9, 14, 21):'}`
     );
+    
     if (userChoice && !isNaN(parseInt(userChoice))) {
         const chosenHour = parseInt(userChoice);
-        const finalDate = new Date(targetDate);
-        finalDate.setHours(chosenHour, 0, 0, 0);
+        const finalDate = new Date(); // Fecha base limpia
+        finalDate.setDate(finalDate.getDate() + 1); // Para mañana
+        finalDate.setHours(chosenHour, 0, 0, 0); // Establecer la hora elegida
+        
         document.getElementById('hostDateTime').value = finalDate.toISOString().slice(0, 16);
         drawTimezoneVisualizer();
     }
 }
+
 
 // --- CORE HELPER FUNCTIONS ---
 function loadCountries() {
@@ -415,5 +415,4 @@ function loadGreetings() {
     select.innerHTML = '';
     const greetings = translations[currentLang].greetings;
     const defaultOption = document.createElement('option');
-    defaultOption.value = "";
-    defaultOption.textCo
+    defaultOption.

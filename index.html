@@ -16,6 +16,15 @@
     </div>
   </div>
 
+  <div class="template-section">
+    <label for="templates" id="templatesLabel">Plantillas</label>
+    <div class="template-controls">
+      <select id="templates"></select>
+      <button id="loadTemplateBtn">Cargar</button>
+      <button id="saveTemplateBtn">Guardar</button>
+    </div>
+  </div>
+
   <label for="company" id="companyLabel">Empresa</label>
   <input type="text" id="company" />
 
@@ -25,8 +34,14 @@
   <label for="description" id="descriptionLabel">Descripción</label>
   <input type="text" id="description" />
 
+  <label for="agenda" id="agendaLabel">Agenda (un punto por línea)</label>
+  <textarea id="agenda" rows="4"></textarea>
+
   <label for="hostDateTime" id="hostDateTimeLabel">Fecha y hora del anfitrión</label>
-  <input type="datetime-local" id="hostDateTime" />
+  <div class="host-time-controls">
+    <input type="datetime-local" id="hostDateTime" />
+    <button id="suggestTimeBtn">Sugerir Hora</button>
+  </div>
 
   <label for="hostCountry" id="hostCountryLabel">País del anfitrión</label>
   <select id="hostCountry"></select>
@@ -38,9 +53,13 @@
   <input type="text" id="searchCountry" oninput="filterCountries()" />
   <select id="countries" multiple></select>
 
+  <div id="timezone-visualizer-container">
+    <label id="visualizerLabel">Visualizador de Horarios</label>
+    <div id="timezone-visualizer"></div>
+  </div>
+
   <label for="presetGreetings" id="presetGreetingsLabel">Seleccionar un saludo final</label>
-  <select id="presetGreetings" onchange="applyGreeting()">
-    </select>
+  <select id="presetGreetings" onchange="applyGreeting()"></select>
 
   <label for="farewell" id="farewellLabel">Mensaje de despedida</label>
   <input type="text" id="farewell" />

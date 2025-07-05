@@ -389,8 +389,6 @@ function suggestOptimalTime() {
         drawTimezoneVisualizer();
     }
 }
-
-
 // --- CORE HELPER FUNCTIONS ---
 function loadCountries() {
   const hostCountrySelect = document.getElementById('hostCountry');
@@ -408,4 +406,178 @@ function loadCountries() {
       hostOption.value = country.name;
       hostOption.textContent = optionText;
       optgroupHost.appendChild(hostOption);
-      const participantOption = document.c
+      const participantOption = document.createElement('option');
+      participantOption.value = country.name;
+      participantOption.textContent = optionText;
+      optgroupParticipants.appendChild(participantOption);
+    });
+    hostCountrySelect.appendChild(optgroupHost);
+    countriesSelect.appendChild(optgroupParticipants);
+  }
+}
+
+function loadGreetings() {
+    const select = document.getElementById('presetGreetings');
+    select.innerHTML = '';
+    const greetings = translations[currentLang].greetings;
+    const defaultOption = document.createElement('option');
+    defaultOption.value = "";
+    defaultOption.textContent = `— ${currentLang === 'es' ? 'Elegir saludo' : 'Choose greeting'} —`;
+    select.appendChild(defaultOption);
+    for (const key in greetings) {
+        const option = document.createElement('option');
+        option.value = greetings[key];
+        option.textContent = key;
+        select.appendChild(option);
+    }
+}
+
+function applyGreeting() {
+  document.getElementById('farewell').value = document.getElementById('presetGreetings').value;
+}
+
+function filterCountries() {
+  const filter = document.getElementById('searchCountry').value.toLowerCase();
+  const options = document.getElementById('countries').options;
+  for (let i = 0; i < options.length; i++) {
+    const option = options[i];
+    option.style.display = option.textContent.toLowerCase().includes(filter) ? '' : 'none';
+  }
+}
+
+function convertToTimeZone(date, timeZone) {
+  if (!date) return '—';
+  try {
+    return new Intl.DateTimeFormat(currentLang === 'es' ? 'es-ES' : 'en-US', {
+      hour: 'numeric', minute: 'numeric', hour12: true, timeZone: timeZone
+    }).format(date);
+  } catch { return '—'; }
+}
+
+function generateICS(date, title, description, company, link) {
+    const toICSDate = (d) => d.toISOString().replace(/[-:.]/g, '').slice(0, 15) + 'Z';
+    const startDate = toICSDate(date);
+    const endDate = toICSDate(new Date(date.getTime() + 60 * 60 * 1000));
+    const icsContent = [
+        'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//ChronosyncInterface//v1.0//EN',
+        'BEGIN:VEVENT', `UID:${Date.now()}@chronosync.app`,
+        `DTSTAMP:${startDate}`, `DTSTART:${startDate}`, `DTEND:${endDate}`,
+        `SUMMARY:${title}`, `DESCRIPTION:${description.replace(/\n/g, '\\n')}`,
+        `LOCATION:${link}`, `ORGANIZER;CN=${company || 'Host'}:mailto:noreply@chronosync.app`,
+        'END:VEVENT', 'END:VCALENDAR'
+    ].join('\r\n');
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const downloadButton = document.createElement('button');
+    downloadButton.id = 'icsButton';
+    downloadButton.textContent = translations[currentLang].icsButton;
+    downloadButton.onclick = () => {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${title.replace(/ /g, '_')}.ics`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    };
+    document.querySelector('.share-buttons').appendChild(downloadButton);
+}
+
+// --- MAIN FUNCTIONS ---
+function generateMessage() {
+    const t = translations[currentLang];
+    const company = document.getElementById('company').value.trim();
+    const title = document.getElementById('meetingTitle').value.trim().toUpperCase();
+    const description = document.getElementById('description').value.trim();
+    const agenda = document.getElementById('agenda').value.trim();
+    const hostDateTimeInput = document.getElementById('hostDateTime').value;
+    const hostCountryName = document.getElementById('hostCountry').value;
+    const link = document.getElementById('link').value.trim();
+    const farewell = document.getElementById('farewell').value.trim() || t.placeholderFarewell;
+    const selectedCountryNames = Array.from(document.getElementById('countries').selectedOptions).map(o => o.value);
+
+    if (!title) return alert(t.alertTitle);
+    if (!hostDateTimeInput) return alert(t.alertDateTime);
+    if (!hostCountryName) return alert(t.alertHostCountry);
+    
+    const hostDate = new Date(hostDateTimeInput);
+    if (isNaN(hostDate)) return alert(t.alertInvalidDate);
+
+    let hostTz = null;
+    let hostCountryEmoji = '';
+    const allCountryObjects = Object.values(countries).flat();
+    const hostCountryData = allCountryObjects.find(c => c.name === hostCountryName);
+    if(hostCountryData) {
+        hostTz = hostCountryData.tz;
+        hostCountryEmoji = hostCountryData.emoji;
+    }
+
+    const hostDateString = new Intl.DateTimeFormat(currentLang === 'es' ? 'es-ES' : 'en-US', {
+        dateStyle: 'full', timeStyle: 'short', hour12: true, timeZone: hostTz
+    }).format(hostDate);
+
+    let message = '';
+    if (company) message += `🏢 *${company}*\n\n`;
+    message += `📌 *${title}*\n`;
+    if (description) message += `_${description}_\n`;
+    if (agenda) {
+        const agendaPoints = agenda.split('\n').map(point => `  - ${point.trim()}`).join('\n');
+        message += `\n\n*${currentLang === 'es' ? 'Agenda' : 'Agenda'}:*\n${agendaPoints}`;
+    }
+    message += `\n\n${t.hostDateLabel}:\n${hostDateString}\n`;
+    message += `\n${t.hostCountryInfoLabel}: ${hostCountryEmoji} ${hostCountryName}\n`;
+    if (link) message += `\n${t.videoCallLabel}:\n${link}`;
+
+    const finalCountries = [...new Set([hostCountryName, ...selectedCountryNames])].filter(Boolean);
+    const selectedByRegion = {};
+
+    finalCountries.forEach(countryName => {
+        const countryData = allCountryObjects.find(c => c.name === countryName);
+        if (!countryData) return;
+        const region = Object.keys(countries).find(r => countries[r].some(c => c.name === countryName));
+        if (!selectedByRegion[region]) {
+            selectedByRegion[region] = [];
+        }
+        // Evitar duplicados
+        if (!selectedByRegion[region].some(c => c.name === countryName)) {
+            selectedByRegion[region].push(countryData);
+        }
+    });
+
+    for (const region in selectedByRegion) {
+        message += `\n\n*${t.regionLabel}: ${region}*\n`;
+        selectedByRegion[region].sort((a,b) => a.name.localeCompare(b.name)).forEach(c => {
+            const time = convertToTimeZone(hostDate, c.tz);
+            message += `${c.emoji} ${c.name}: ${time}\n`;
+        });
+    }
+
+    message += `\n\n${farewell}`;
+    document.getElementById('output').textContent = message;
+
+    const existingICSButton = document.getElementById('icsButton');
+    if (existingICSButton) existingICSButton.remove();
+    generateICS(hostDate, title, description, company, link);
+}
+
+function copyToClipboard() {
+  const output = document.getElementById('output').textContent;
+  if (!output) return alert(translations[currentLang].alertNoMessage);
+  navigator.clipboard.writeText(output).then(() => {
+    alert(translations[currentLang].alertMessageCopied);
+  });
+}
+
+function share(platform) {
+  const output = document.getElementById('output').textContent;
+  if (!output) return alert(translations[currentLang].alertGenerateFirst);
+  const encodedMessage = encodeURIComponent(output);
+  let url = '';
+  if (platform === 'whatsapp') {
+    url = `https://api.whatsapp.com/send?text=${encodedMessage}`;
+  } else if (platform === 'telegram') {
+    url = `https://t.me/share/url?url=&text=${encodedMessage}`;
+  }
+  if (url) window.open(url, '_blank');
+          }
+      

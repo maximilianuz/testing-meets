@@ -380,7 +380,6 @@ function suggestOptimalTime() {
     }
 }
 
-
 // --- CORE HELPER FUNCTIONS ---
 function loadCountries() {
   const hostCountrySelect = document.getElementById('hostCountry');

@@ -90,23 +90,17 @@ const translations = {
     loadTemplateBtn: "Cargar",
     saveTemplateBtn: "Guardar",
     companyLabel: "Empresa",
-    placeholderCompany: "Nombre de la empresa",
     meetingTitleLabel: "Título de la reunión",
-    placeholderTitle: "Ej: Reunión Estratégica",
     descriptionLabel: "Descripción",
-    placeholderDescription: "Descripción breve de la reunión",
     agendaLabel: "Agenda (un punto por línea)",
     hostDateTimeLabel: "Fecha y hora del anfitrión",
     suggestTimeBtn: "Sugerir Hora",
     hostCountryLabel: "País del anfitrión",
     linkLabel: "Enlace a la videollamada",
-    placeholderLink: "https://...",
     countriesLabel: "Selecciona los países participantes",
-    searchPlaceholder: "Buscar país...",
     visualizerLabel: "Visualizador de Horarios",
     presetGreetingsLabel: "Seleccionar un saludo final",
     farewellLabel: "Mensaje de despedida",
-    placeholderFarewell: "¡Los esperamos!",
     generateButton: "Generar Mensaje",
     copyButton: "📋 Copiar",
     whatsappButton: "📱 WhatsApp",
@@ -125,6 +119,12 @@ const translations = {
     hostCountryInfoLabel: "País anfitrión",
     videoCallLabel: "Enlace a la videollamada",
     regionLabel: "Región",
+    placeholderCompany: "Nombre de la empresa",
+    placeholderTitle: "Ej: Reunión Estratégica",
+    placeholderDescription: "Descripción breve de la reunión",
+    placeholderLink: "https://...",
+    searchPlaceholder: "Buscar país...",
+    placeholderFarewell: "¡Los esperamos!",
     greetings: {
         "¡Saludos cordiales! 👋": "¡Saludos cordiales! 👋",
         "Nos vemos pronto 😊": "Nos vemos pronto 😊",
@@ -140,23 +140,17 @@ const translations = {
     loadTemplateBtn: "Load",
     saveTemplateBtn: "Save",
     companyLabel: "Company",
-    placeholderCompany: "Company Name",
     meetingTitleLabel: "Meeting Title",
-    placeholderTitle: "E.g., Strategic Meeting",
     descriptionLabel: "Description",
-    placeholderDescription: "Brief description of the meeting",
     agendaLabel: "Agenda (one item per line)",
     hostDateTimeLabel: "Host's Date & Time",
     suggestTimeBtn: "Suggest Time",
     hostCountryLabel: "Host's Country",
     linkLabel: "Video Call Link",
-    placeholderLink: "https://...",
     countriesLabel: "Select Participant Countries",
-    searchPlaceholder: "Search for a country...",
     visualizerLabel: "Timezone Visualizer",
     presetGreetingsLabel: "Select a Closing Greeting",
     farewellLabel: "Farewell Message",
-    placeholderFarewell: "Looking forward to seeing you!",
     generateButton: "Generate Message",
     copyButton: "📋 Copy",
     whatsappButton: "📱 WhatsApp",
@@ -175,6 +169,12 @@ const translations = {
     hostCountryInfoLabel: "Host country",
     videoCallLabel: "Video call link",
     regionLabel: "Region",
+    placeholderCompany: "Company Name",
+    placeholderTitle: "E.g., Strategic Meeting",
+    placeholderDescription: "Brief description of the meeting",
+    placeholderLink: "https://...",
+    searchPlaceholder: "Search for a country...",
+    placeholderFarewell: "Looking forward to seeing you!",
     greetings: {
         "Kind regards! 👋": "Kind regards! 👋",
         "See you soon 😊": "See you soon 😊",
@@ -209,44 +209,55 @@ function setLanguage(lang) {
   if (!translations[lang]) lang = 'en';
   currentLang = lang;
   localStorage.setItem('preferredLang', lang);
+  
   const t = translations[lang];
-  const textElements = {
-    'appTitle': 'appTitle', 'title': 'title', 'templatesLabel': 'templatesLabel',
-    'loadTemplateBtn': 'loadTemplateBtn', 'saveTemplateBtn': 'saveTemplateBtn',
-    'companyLabel': 'companyLabel', 'meetingTitleLabel': 'meetingTitleLabel',
-    'descriptionLabel': 'descriptionLabel', 'agendaLabel': 'agendaLabel',
-    'hostDateTimeLabel': 'hostDateTimeLabel', 'suggestTimeBtn': 'suggestTimeBtn',
-    'hostCountryLabel': 'hostCountryLabel', 'linkLabel': 'linkLabel',
-    'countriesLabel': 'countriesLabel', 'visualizerLabel': 'visualizerLabel',
-    'presetGreetingsLabel': 'presetGreetingsLabel', 'farewellLabel': 'farewellLabel',
-    'generateButton': 'generateButton', 'copyButton': 'copyButton',
-    'whatsappButton': 'whatsappButton', 'telegramButton': 'telegramButton',
-    'licenseLink': 'licenseLink'
-  };
-  for (const id in textElements) {
-    document.getElementById(id).textContent = t[textElements[id]];
-  }
-  const placeholderElements = {
-    'company': 'placeholderCompany', 'meetingTitle': 'placeholderTitle',
-    'description': 'placeholderDescription', 'link': 'placeholderLink',
-    'searchCountry': 'searchPlaceholder', 'farewell': 'placeholderFarewell'
-  };
-  for (const id in placeholderElements) {
-    document.getElementById(id).placeholder = t[placeholderElements[id]];
-  }
   document.documentElement.lang = lang;
+
+  // Manera directa y segura de traducir
+  document.getElementById('appTitle').textContent = t.appTitle;
+  document.getElementById('title').textContent = t.title;
+  document.getElementById('templatesLabel').textContent = t.templatesLabel;
+  document.getElementById('loadTemplateBtn').textContent = t.loadTemplateBtn;
+  document.getElementById('saveTemplateBtn').textContent = t.saveTemplateBtn;
+  document.getElementById('companyLabel').textContent = t.companyLabel;
+  document.getElementById('meetingTitleLabel').textContent = t.meetingTitleLabel;
+  document.getElementById('descriptionLabel').textContent = t.descriptionLabel;
+  document.getElementById('agendaLabel').textContent = t.agendaLabel;
+  document.getElementById('hostDateTimeLabel').textContent = t.hostDateTimeLabel;
+  document.getElementById('suggestTimeBtn').textContent = t.suggestTimeBtn;
+  document.getElementById('hostCountryLabel').textContent = t.hostCountryLabel;
+  document.getElementById('linkLabel').textContent = t.linkLabel;
+  document.getElementById('countriesLabel').textContent = t.countriesLabel;
+  document.getElementById('visualizerLabel').textContent = t.visualizerLabel;
+  document.getElementById('presetGreetingsLabel').textContent = t.presetGreetingsLabel;
+  document.getElementById('farewellLabel').textContent = t.farewellLabel;
+  document.getElementById('generateButton').textContent = t.generateButton;
+  document.getElementById('copyButton').textContent = t.copyButton;
+  document.getElementById('whatsappButton').textContent = t.whatsappButton;
+  document.getElementById('telegramButton').textContent = t.telegramButton;
+  document.getElementById('licenseLink').textContent = t.licenseLink;
   document.getElementById('licenseText').firstChild.nodeValue = t.licenseText + ' ';
+
+  document.getElementById('company').placeholder = t.placeholderCompany;
+  document.getElementById('meetingTitle').placeholder = t.placeholderTitle;
+  document.getElementById('description').placeholder = t.placeholderDescription;
+  document.getElementById('link').placeholder = t.placeholderLink;
+  document.getElementById('searchCountry').placeholder = t.searchPlaceholder;
+  document.getElementById('farewell').placeholder = t.placeholderFarewell;
+
   const icsButton = document.getElementById('icsButton');
   if(icsButton) icsButton.textContent = t.icsButton;
+
   document.getElementById('lang-es').classList.toggle('active', lang === 'es');
   document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+
   loadCountries();
   loadGreetings();
 }
 
 // --- TEMPLATE FUNCTIONS ---
 function saveTemplate() {
-    const templateName = prompt(translations[currentLang].templatesLabel === 'Plantillas' ? 'Nombre para la plantilla:' : 'Name for the template:');
+    const templateName = prompt(currentLang === 'es' ? 'Nombre para la plantilla:' : 'Name for the template:');
     if (!templateName) return;
     const selectedCountries = Array.from(document.getElementById('countries').selectedOptions).map(o => o.value);
     const template = {
@@ -343,7 +354,6 @@ function suggestOptimalTime() {
     let bestSlots = [];
     
     for (let h = 0; h < 24; h++) {
-        // CORRECCIÓN: Crear una fecha base limpia para cada iteración
         const baseDate = new Date();
         baseDate.setDate(baseDate.getDate() + 1);
         baseDate.setHours(h, 0, 0, 0);
@@ -352,8 +362,6 @@ function suggestOptimalTime() {
         countryObjects.forEach(country => {
             const localTime = new Date(baseDate.toLocaleString('en-US', { timeZone: country.tz }));
             const localHour = localTime.getHours();
-            
-            // Lógica Universal: Puntúa más alto si todos están en horario diurno.
             if (localHour >= 7 && localHour < 23) {
                 score++;
             }
@@ -373,9 +381,9 @@ function suggestOptimalTime() {
     
     if (userChoice && !isNaN(parseInt(userChoice))) {
         const chosenHour = parseInt(userChoice);
-        const finalDate = new Date(); // Fecha base limpia
-        finalDate.setDate(finalDate.getDate() + 1); // Para mañana
-        finalDate.setHours(chosenHour, 0, 0, 0); // Establecer la hora elegida
+        const finalDate = new Date();
+        finalDate.setDate(finalDate.getDate() + 1);
+        finalDate.setHours(chosenHour, 0, 0, 0);
         
         document.getElementById('hostDateTime').value = finalDate.toISOString().slice(0, 16);
         drawTimezoneVisualizer();
@@ -400,19 +408,4 @@ function loadCountries() {
       hostOption.value = country.name;
       hostOption.textContent = optionText;
       optgroupHost.appendChild(hostOption);
-      const participantOption = document.createElement('option');
-      participantOption.value = country.name;
-      participantOption.textContent = optionText;
-      optgroupParticipants.appendChild(participantOption);
-    });
-    hostCountrySelect.appendChild(optgroupHost);
-    countriesSelect.appendChild(optgroupParticipants);
-  }
-}
-
-function loadGreetings() {
-    const select = document.getElementById('presetGreetings');
-    select.innerHTML = '';
-    const greetings = translations[currentLang].greetings;
-    const defaultOption = document.createElement('option');
-    defaultOption.
+      const participantOption = document.c

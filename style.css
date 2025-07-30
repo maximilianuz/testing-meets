@@ -65,8 +65,30 @@ input:focus, select:focus, textarea:focus {
 }
 select[multiple] { height: 200px; padding: 10px; }
 
-.host-time-controls, .template-controls { display: flex; gap: 10px; align-items: center; margin-top: 8px; }
-.host-time-controls input, .template-controls select { flex-grow: 1; margin-top: 0; }
+.form-row { display: flex; gap: 20px; align-items: flex-start; }
+.form-group { flex: 1; }
+
+.host-time-controls, .template-controls, .custom-tz-controls { display: flex; gap: 10px; align-items: center; margin-top: 8px; }
+.host-time-controls input, .template-controls select, .custom-tz-controls input { flex-grow: 1; margin-top: 0; }
+
+.options-area {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  background-color: var(--bg-light);
+  padding: 12px;
+  border-radius: 8px;
+}
+.options-area input[type="checkbox"] {
+  width: auto;
+  margin: 0 10px 0 0;
+}
+.options-area label {
+  margin: 0;
+  font-weight: normal;
+  color: var(--text-light);
+  font-size: 0.9em;
+}
 
 /* --- 4. BOTONERA --- */
 button {
@@ -89,25 +111,41 @@ button:hover { transform: translateY(-1px); }
 button:active { transform: translateY(0); box-shadow: none; }
 button svg { width: 16px; height: 16px; fill: currentColor; }
 
-/* Estilos de botones por función */
+.main-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+    align-items: stretch;
+}
+
 #generateButton {
-  width: 100%;
-  margin-top: 25px;
-  padding: 16px;
-  font-size: 1.1em;
-  font-weight: 700;
-  background-color: var(--primary-color);
+    margin-top: 0;
+    flex-grow: 1;
+    padding: 16px;
+    font-size: 1.1em;
+    font-weight: 700;
+    background-color: var(--primary-color);
 }
 #generateButton:hover { background-color: var(--primary-hover); }
 
-#suggestTimeBtn, #loadTemplateBtn, #saveTemplateBtn {
+#resetButton {
+    flex-shrink: 0;
+    width: 50px;
+    background-color: var(--secondary-color);
+    padding: 10px;
+}
+#resetButton:hover { background-color: var(--secondary-hover); }
+#resetButton svg { width: 20px; height: 20px; }
+
+#suggestTimeBtn, #loadTemplateBtn, #saveTemplateBtn, #addTzBtn {
   background-color: var(--secondary-color);
   padding: 12px;
-  height: 46px; /* Altura consistente */
-  width: 46px; /* Ancho consistente para botones de ícono */
+  height: 46px;
+  width: 46px;
   margin-top: 0;
+  flex-shrink: 0;
 }
-#suggestTimeBtn:hover, #loadTemplateBtn:hover, #saveTemplateBtn:hover { background-color: var(--secondary-hover); }
+#suggestTimeBtn:hover, #loadTemplateBtn:hover, #saveTemplateBtn:hover, #addTzBtn:hover { background-color: var(--secondary-hover); }
 
 .share-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
 .share-buttons button, #icsButton { flex-grow: 1; margin-top: 0; }
@@ -116,11 +154,41 @@ button svg { width: 16px; height: 16px; fill: currentColor; }
 #telegramButton { background-color: #229ED9; }
 #icsButton { background-color: #34c759; }
 
-/* Icon-only buttons */
 #whatsappButton, #telegramButton { flex-grow: 0; width: 46px; height: 46px; padding: 0; gap: 0; }
 #whatsappButton svg, #telegramButton svg { width: 20px; height: 20px; }
 
+
 /* --- 5. COMPONENTES ESPECÍFICOS --- */
+.suggestion-box {
+    margin-top: 10px;
+    padding: 0;
+    border-radius: 8px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    transition: all 0.3s ease;
+}
+.suggestion-chip {
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-light);
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+.suggestion-chip:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+.suggestion-chip.best {
+    background-color: var(--green-color);
+    border-color: var(--green-color);
+    color: white;
+    font-weight: bold;
+}
+
 #timezone-visualizer-container { margin-top: 25px; }
 #timezone-visualizer {
   position: relative;
@@ -152,6 +220,7 @@ button svg { width: 16px; height: 16px; fill: currentColor; }
 
 #output {
   white-space: pre-wrap;
+  word-break: break-word;
   background-color: var(--bg-light);
   padding: 15px;
   border-radius: 8px;
@@ -170,5 +239,10 @@ button svg { width: 16px; height: 16px; fill: currentColor; }
   input:focus, select:focus, textarea:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.3); }
   #timezone-visualizer { background-color: var(--bg-dark); }
   #output { background-color: var(--bg-dark); border-color: var(--border-dark); }
+  .options-area { background-color: var(--bg-dark); }
+  .options-area label { color: var(--text-dark); }
+  .suggestion-chip { background-color: var(--card-bg-dark); border-color: var(--border-dark); }
+  .suggestion-chip:hover { background-color: var(--primary-hover); border-color: var(--primary-hover); }
+  .suggestion-chip.best { background-color: var(--green-hover); border-color: var(--green-hover); }
   .tz-marker.is-day { background-color: var(--green-hover); }
 }

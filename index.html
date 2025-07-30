@@ -34,34 +34,51 @@
     </div>
 
     <label for="company" id="companyLabel">Empresa</label>
-    <input type="text" id="company" />
+    <input type="text" id="company" class="save-state"/>
 
     <label for="meetingTitle" id="meetingTitleLabel">Título de la reunión</label>
-    <input type="text" id="meetingTitle" oninput="this.value = this.value.toUpperCase()" />
+    <input type="text" id="meetingTitle" oninput="this.value = this.value.toUpperCase()" class="save-state"/>
 
     <label for="description" id="descriptionLabel">Descripción</label>
-    <input type="text" id="description" />
+    <input type="text" id="description" class="save-state"/>
 
     <label for="agenda" id="agendaLabel">Agenda (un punto por línea)</label>
-    <textarea id="agenda" rows="4"></textarea>
+    <textarea id="agenda" rows="4" class="save-state"></textarea>
 
-    <label for="hostDateTime" id="hostDateTimeLabel">Fecha y hora del anfitrión</label>
-    <div class="host-time-controls">
-      <input type="datetime-local" id="hostDateTime" />
-      <button id="suggestTimeBtn" title="Sugerir hora óptima">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13.46 3.46a.5.5 0 0 1 .708 0l1.414 1.414a.5.5 0 0 1 0 .708l-1.414 1.414a.5.5 0 0 1-.708 0L12.05 5.586l1.414-1.414zM12.05 9.97l1.414 1.414a.5.5 0 0 1 0 .708l-1.414 1.414a.5.5 0 0 1-.708 0L9.97 12.05l1.414-1.414zM3.46 13.46a.5.5 0 0 1 0 .708l-1.414 1.414a.5.5 0 0 1-.708 0L.025 14.17a.5.5 0 0 1 0-.708l1.414-1.414a.5.5 0 0 1 .708 0zM5.586 12.05l-1.414 1.414a.5.5 0 0 1-.708 0L2.05 12.05l1.414-1.414a.5.5 0 0 1 .708 0zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zM8 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm-5.5-7.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zM11 8a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/></svg>
-      </button>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="hostDateTime" id="hostDateTimeLabel">Fecha y hora del anfitrión</label>
+            <div class="host-time-controls">
+                <input type="datetime-local" id="hostDateTime" class="save-state"/>
+                <button id="suggestTimeBtn" title="Sugerir hora óptima">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13.46 3.46a.5.5 0 0 1 .708 0l1.414 1.414a.5.5 0 0 1 0 .708l-1.414 1.414a.5.5 0 0 1-.708 0L12.05 5.586l1.414-1.414zM12.05 9.97l1.414 1.414a.5.5 0 0 1 0 .708l-1.414 1.414a.5.5 0 0 1-.708 0L9.97 12.05l1.414-1.414zM3.46 13.46a.5.5 0 0 1 0 .708l-1.414 1.414a.5.5 0 0 1-.708 0L.025 14.17a.5.5 0 0 1 0-.708l1.414-1.414a.5.5 0 0 1 .708 0zM5.586 12.05l-1.414 1.414a.5.5 0 0 1-.708 0L2.05 12.05l1.414-1.414a.5.5 0 0 1 .708 0zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zM8 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm-5.5-7.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zM11 8a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/></svg>
+                </button>
+            </div>
+        </div>
+        <div class="form-group">
+             <label for="duration" id="durationLabel">Duración (minutos)</label>
+             <input type="number" id="duration" value="60" min="15" step="15" class="save-state"/>
+        </div>
     </div>
+    <div id="suggestion-box" class="suggestion-box"></div>
+
 
     <label for="hostCountry" id="hostCountryLabel">País del anfitrión</label>
-    <select id="hostCountry"></select>
+    <select id="hostCountry" class="save-state"></select>
 
     <label for="link" id="linkLabel">Enlace a la videollamada</label>
-    <input type="url" id="link" />
+    <input type="url" id="link" class="save-state"/>
 
     <label for="countries" id="countriesLabel">Selecciona los países participantes</label>
     <input type="text" id="searchCountry" oninput="filterCountries()" />
-    <select id="countries" multiple></select>
+    <select id="countries" multiple class="save-state-multiple"></select>
+    
+    <label for="customTz" id="customTzLabel">Añadir zona horaria manual (IANA)</label>
+    <div class="custom-tz-controls">
+        <input type="text" id="customTz" placeholder="Ej: America/Vancouver, Europe/Moscow" />
+        <button id="addTzBtn">+</button>
+    </div>
+
 
     <div id="timezone-visualizer-container">
       <label id="visualizerLabel">Visualizador de Horarios</label>
@@ -72,22 +89,40 @@
     <select id="presetGreetings" onchange="applyGreeting()"></select>
 
     <label for="farewell" id="farewellLabel">Mensaje de despedida</label>
-    <input type="text" id="farewell" />
+    <input type="text" id="farewell" class="save-state"/>
 
-    <button onclick="generateMessage()" id="generateButton">Generar Mensaje</button>
+    <div class="options-area">
+        <input type="checkbox" id="compactMessage" name="compactMessage" class="save-state"/>
+        <label for="compactMessage" id="compactMessageLabel">Generar mensaje compacto (una sola línea)</label>
+    </div>
+    
+    <div class="main-actions">
+        <button onclick="generateMessage()" id="generateButton">Generar Mensaje</button>
+        <button onclick="resetForm()" id="resetButton" title="Limpiar formulario">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/>
+                <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/>
+            </svg>
+        </button>
+    </div>
+
 
     <div id="output"></div>
 
     <div class="share-buttons">
       <button onclick="copyToClipboard()" id="copyButton" title="Copiar mensaje">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13,0H6A2,2,0,0,0,4,2V14a2,2,0,0,0,2,2H13a2,2,0,0,0,2-2V2A2,2,0,0,0,13,0ZM13,14H6V2H13Z"/><path d="M3,3H1A1,1,0,0,0,0,4V15a1,1,0,0,0,1,1H10a1,1,0,0,0,1-1V14H3Z"/></svg>
-        COPY
+        COPIAR
       </button>
       <button onclick="share('whatsapp')" id="whatsappButton" aria-label="Compartir en WhatsApp" title="Compartir en WhatsApp">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512" fill="currentColor">
+            <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zM223.9 439.6c-33.8 0-66.3-8.8-94.3-25.1l-6.7-4-69.8 18.3L78 358.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5c-.1 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
+        </svg>
       </button>
       <button onclick="share('telegram')" id="telegramButton" aria-label="Compartir en Telegram" title="Compartir en Telegram">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.287 5.906c-.778.324-2.334.994-4.666 2.01-.378.15-.577.298-.595.442-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294.26.006.549-.1.868-.32C7.654 8.59 11.01 6.55 11.422 6.22c.413-.33.614-.39.804-.405.25-.02.487.03.663.22.19.205.228.522.228.593 0 .041-.01.09-.034.143-.161.411-2.94 2.85-4.12 3.96-.333.36-.626.65-.926.85-.314.2-.67.33-.997.33-.35 0-.65-.11-.87-.33-.224-.22-.27-.51-.27-.62 0-.065.016-.13.046-.197.04-.085.16-.29.33-.515.15-.19.34-.41.56-.63.26-.26.5-.5.71-.71.25-.25.47-.47.65-.65zm-2.165 4.145c.16-.16.29-.3.41-.44.12-.14.23-.28.32-.42.09-.14.15-.28.19-.41.04-.13.06-.25.06-.36 0-.2-.08-.37-.23-.51-.14-.14-.33-.2-.55-.2-.17 0-.33.03-.46.1.02.04.03.07.04.1.01.03.02.06.02.09 0 .05-.01.1-.03.15-.02.05-.04.1-.07.15-.03.05-.06.1-.09.15-.03.05-.06.1-.1.15-.03.05-.07.09-.1.14-.04.05-.07.1-.11.14-.04.04-.08.09-.12.13-.04.04-.08.08-.12.12-.04.04-.08.08-.12.12l-.09.09c-.08.08-.15.15-.22.22-.07.07-.13.13-.2.2-.07.07-.13.13-.19.19-.06.06-.12.12-.18.18s-.11.11-.17.17c-.06.06-.11.11-.17.17l-.11.11-.1.1c-.05.05-.09.09-.14.14-.05.05-.09.09-.14.14-.05.05-.09.09-.14.14l-.06.06c-.05.05-.1.1-.15.15-.05.05-.1.1-.15.15z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 496 512" fill="currentColor">
+            <path d="M248,8C111.033,8,0,119.033,0,256S111.033,504,248,504,496,392.967,496,256,384.967,8,248,8ZM362.952,176.66c-3.732,39.215-19.881,134.378-28.1,178.3-3.476,18.584-10.322,24.816-16.948,25.425-14.4,1.326-25.338-9.517-39.287-18.661-21.827-14.308-34.158-23.215-55.346-37.177-24.485-16.135-8.612-25,5.342-39.5,3.652-3.777,23.12-21.2,68.23-61.443-4.14,1.444-8.651,3.245-13.731,5.55-6.817,3.064-13.629,6.126-20.44,9.188-9.042,4.056-17.845,8.12-26.649,12.184-13.5,6.239-25.869,11.942-38.235,17.651-14.934,6.89-25.2,10.334-31.462,10.334-6.426,0-10.873-3.128-15.342-9.379-4.469-6.251-8.539-16.7-12.61-26.942-4.939-12.704-9.929-25.46-14.968-38.256-4.276-10.756-8.231-15.4-11.853-15.4-3.622,0-7.38,1.571-11.237,4.718-4.469,3.622-7.843,7.38-11.236,11.237C63.952,184.86,63.952,184.86,63.952,184.86c-4.469-4.469-4.469-4.469-4.469-4.469l-11.237-11.237C55.245,166.155,59.182,163,65.808,163c6.627,0,10.873,2.571,13.629,8.121,2.756,5.55,6.13,13.629,10.1,23.816,4.817,12.184,9.686,24.368,14.453,36.157,4.767,11.789,8.837,19.378,12.22,22.569,3.383,3.191,7.453,5.1,11.523,5.1,4.07,0,8.14-1.571,12.22-4.718,19.378-14.113,32.483-25.338,45.588-36.562,8.99-7.669,17.149-14.454,24.368-20.441,7.219-5.986,13.5-11.237,18.9-15.706,6.995-5.659,10.441-8.121,10.441-8.121,0,0,4.817,2.857,9.634,5.714,2.381,1.429,4.762,2.857,7.143,4.286,2.381,1.429,4.762,2.857,7.143,4.286,2.381,1.429,4.762,2.857,7.143,4.286C329.071,153.89,350.115,165.492,362.952,176.66Z"/>
+        </svg>
       </button>
     </div>
 
